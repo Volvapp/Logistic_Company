@@ -1,0 +1,25 @@
+footer {
+    position:absolute;
+    width:100%;
+}
+.bg-blur {
+    /*background-color: rgb(0, 0, 0); !* Fallback color *!*/
+    background-color: rgb(22 48 45 / 66%); /* Black w/opacity/see-through */
+    color: black;
+    font-weight: bold;
+    z-index: 2;
+    width: 100%;
+}
+body {
+    background-image: url(/images/blue.jpg);
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+    height: 100vh;
+}
+
+
+/*.mainPhoto {*/
+/*    background-image: url(/images/background.jpg);*/
+/*    height: 100vh;*/
+/*}*/

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Device Shop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/reset-css.css"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/style.css"/>
+    <script src="https://kit.fontawesome.com/82b50b300e.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+<nav style="background-color: rgb(151 203 200);" th:fragment="navigation" class="navbar navbar-expand-lg navbar-light bg-blur ">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+            <img src="/images/navlogo.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
+            Logistic Company
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <th:block sec:authorize="isAuthenticated()">
+                    <a class="nav-link" aria-current="page" th:href="@{/home}">Home</a>
+                    <a class="nav-link" th:href="@{/users/my-coupons}">MyCoupons</a>
+                </th:block>
+
+
+                <a sec:authorize="hasRole('ADMIN')" class="nav-link" th:href="@{/users/warehouse}">Warehouse</a>
+
+                <th:block sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/users/login}">Login</a>
+                    <a class="nav-link" th:href="@{/users/register}">Register</a>
+                </th:block>
+
+
+                <div class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownOne" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        Catalogs
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" th:href="@{/smartphones/catalog}">Smartphone Products</a></li>
+                        <li><a class="dropdown-item" th:href="@{/computers/catalog}">Computer Products</a></li>
+                    </ul>
+                </div>
+                <div class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTwo" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        Add Device
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" th:href="@{/smartphones/add-smartphone}">Add Smartphone</a></li>
+                        <li><a class="dropdown-item" th:href="@{/computers/add-computer}">Add Computer</a></li>
+                    </ul>
+                </div>
+                <div class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownThree" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        Add Offer
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" th:href="@{/offers/add-computer-offer}">Add Computer Offer</a></li>
+                        <li><a class="dropdown-item" th:href="@{/offers/add-smartphone-offer}">Add Smartphone Offer</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <a sec:authorize="hasRole('ADMIN')" class="nav-link" th:href="@{/statistics}">Statistics</a>
+
+
+            </div>
+        </div>
+        <ul sec:authorize="isAuthenticated()" class="nav navbar-nav">
+            <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTwof" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    [(#{user})] <span sec:authorize="isAuthenticated()"
+                                sec:authentication="name">
+                            Name of the logged in user.
+                          </span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="nav-link" th:href="@{/users/profile}">Profile</a></li>
+                    <li>
+                        <form th:action="@{/users/logout}" th:method="post">
+                            <input class="btn nav-link " type="submit" value="Logout">
+                        </form>
+                    </li>
+                </ul>
+            </li>
+            <li style="background-color: #237600!important;" id="balanceId" class="nav-item">
+
+            </li>
+            <script th:src="@{/js/userInfo.js}"></script>
+        </ul>
+    </div>
+
+</nav>
+
+
+<footer th:fragment="footer" class="footer text-center text-white bg-blur">
+
+    <div class="container p-4 pb-0">
+        <section class="mb-4">
+            <a
+                    class="btn btn-primary btn-floating m-1"
+                    style="background-color: #3b5998;"
+                    href="https://www.facebook.com/groups/4037492083034015"
+                    role="button"
+            ><i class="fab fa-facebook-f"></i
+            ></a>
+            <a
+                    class="btn btn-primary btn-floating m-1"
+                    style="background-color: #55acee;"
+                    href="https://twitter.com/softunibg?lang=bg"
+                    role="button"
+            ><i class="fab fa-twitter"></i
+            ></a>
+            <a
+                    class="btn btn-primary btn-floating m-1"
+                    style="background-color: #ac2bac;"
+                    href="https://www.instagram.com/softuni.bg/?hl=bg"
+                    role="button"
+            ><i class="fab fa-instagram"></i
+            ></a>
+            <a
+                    class="btn btn-primary btn-floating m-1"
+                    style="background-color: #0082ca;"
+                    href="https://bg.linkedin.com/school/software-university-softuni/"
+                    role="button"
+            ><i class="fab fa-linkedin-in"></i
+            ></a>
+            <a
+                    class="btn btn-primary btn-floating m-1"
+                    style="background-color: #333333;"
+                    href="https://github.com/vladikata2535"
+                    role="button"
+            ><i class="fab fa-github"></i
+            ></a>
+        </section>
+    </div>
+
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);"
+         th:text="| ${#dates.year(#dates.createNow())} Copyright: Logistic Company|">
+    </div>
+</footer>
+
+</body>
+</html>

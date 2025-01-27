@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.logisticcompany.model.enums.PackageType;
 import org.logisticcompany.model.enums.State;
 
 @Entity
@@ -27,4 +28,7 @@ public class Package extends BaseEntity{
     @Enumerated(EnumType.STRING)
     @Column(name = "state", nullable = false)
     private State state;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    private PackageType type;
 }

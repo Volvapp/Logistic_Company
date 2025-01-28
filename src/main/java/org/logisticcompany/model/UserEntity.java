@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.logisticcompany.model.enums.Role;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -16,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity {
+public class UserEntity extends BaseEntity {
     @Column(name = "username", unique = true, nullable = false)
     private String username;
     @Column(name = "first_name", nullable = false)
@@ -31,6 +30,8 @@ public class User extends BaseEntity {
     private Integer age;
     @Column(name = "born_on")
     private LocalDate bornOn;
+    @Column(name = "country")
+    private String country;
     @OneToMany
     private Set<RoleEntity> roles;
 }

@@ -25,5 +25,5 @@ public class Office extends BaseEntity{
     @OneToMany
     private List<Package> packages;
     @OneToMany
-    private List<User> users;
+    private List<UserEntity> userEntities;
 }

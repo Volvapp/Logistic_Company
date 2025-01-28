@@ -85,9 +85,9 @@
             <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTwof" role="button"
                    data-bs-toggle="dropdown" aria-expanded="false">
-                    [(#{user})] <span sec:authorize="isAuthenticated()"
+                    [(#{userEntity})] <span sec:authorize="isAuthenticated()"
                                 sec:authentication="name">
-                            Name of the logged in user.
+                            Name of the logged in userEntity.
                           </span>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">

@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -20,14 +21,23 @@ public class WebSecurityConfiguration {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/", "/home").permitAll()
+                        .requestMatchers("/", "/home", "/users/login", "/users/register").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login")
+                        .loginPage("/users/login")
+                        .usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
+                        .passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY)
+                        .defaultSuccessUrl("/")
+                        .failureForwardUrl("/users/login-error")
                         .permitAll()
                 )
-                .logout((logout) -> logout.permitAll());
+                .logout((logout) ->
+                        logout
+                                .logoutUrl("/users/logout")
+                                .logoutSuccessUrl("/")
+                                .invalidateHttpSession(true)
+                                .deleteCookies("JSESSIONID"));
 
         return http.build();
     }
@@ -38,7 +48,7 @@ public class WebSecurityConfiguration {
                 User.withDefaultPasswordEncoder()
                         .username("user")
                         .password("password")
-                        .roles("USER")
+                        .roles("CLIENT", "ADMIN", "OFFICE_EMPLOYEE", "COURIER_EMPLOYEE")
                         .build();
 
         return new InMemoryUserDetailsManager(user);

@@ -16,9 +16,9 @@ import org.logisticcompany.model.enums.State;
 @Table(name = "packages")
 public class Package extends BaseEntity{
     @ManyToOne
-    private User sender;
+    private UserEntity sender;
     @ManyToOne
-    private User receiver;
+    private UserEntity receiver;
     @Column(name = "address", nullable = false)
     private String address;
     @Column(name = "weight", nullable = false)

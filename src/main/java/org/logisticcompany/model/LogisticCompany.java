@@ -25,5 +25,5 @@ public class LogisticCompany extends BaseEntity {
     @OneToMany
     private List<Office> offices;
     @OneToMany
-    private List<User> users;
+    private List<UserEntity> userEntities;
 }

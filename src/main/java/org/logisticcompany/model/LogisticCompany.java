@@ -4,18 +4,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "logistic_companies")
 public class LogisticCompany extends BaseEntity {
     @Column(name = "name", nullable = false, unique = true)
@@ -26,4 +19,47 @@ public class LogisticCompany extends BaseEntity {
     private List<Office> offices;
     @OneToMany
     private List<UserEntity> userEntities;
+
+    public LogisticCompany(String name, Double revenue) {
+        this.name = name;
+        this.revenue = revenue;
+        this.offices = new ArrayList<>();
+        this.userEntities = new ArrayList<>();
+    }
+
+    public LogisticCompany() {
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Double getRevenue() {
+        return revenue;
+    }
+
+    public void setRevenue(Double revenue) {
+        this.revenue = revenue;
+    }
+
+    public List<Office> getOffices() {
+        return offices;
+    }
+
+    public void setOffices(List<Office> offices) {
+        this.offices = offices;
+    }
+
+    public List<UserEntity> getUserEntities() {
+        return userEntities;
+    }
+
+    public void setUserEntities(List<UserEntity> userEntities) {
+        this.userEntities = userEntities;
+    }
 }

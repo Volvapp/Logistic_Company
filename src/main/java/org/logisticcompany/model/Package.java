@@ -1,18 +1,10 @@
 package org.logisticcompany.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.logisticcompany.model.enums.PackageType;
 import org.logisticcompany.model.enums.State;
 
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "packages")
 public class Package extends BaseEntity{
     @ManyToOne
@@ -31,4 +23,87 @@ public class Package extends BaseEntity{
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private PackageType type;
+
+    public Package(UserEntity sender, UserEntity receiver, String address, Double weight, Double price, State state, PackageType type) {
+        this.sender = sender;
+        this.receiver = receiver;
+        this.address = address;
+        this.weight = weight;
+        this.price = price;
+        this.state = state;
+        this.type = type;
+    }
+
+    public Package() {
+
+    }
+
+    public UserEntity getSender() {
+        return sender;
+    }
+
+    public void setSender(UserEntity sender) {
+        this.sender = sender;
+    }
+
+    public UserEntity getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(UserEntity receiver) {
+        this.receiver = receiver;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public PackageType getType() {
+        return type;
+    }
+
+    public void setType(PackageType type) {
+        this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "Package{" +
+                "sender=" + sender +
+                ", receiver=" + receiver +
+                ", address='" + address + '\'' +
+                ", weight=" + weight +
+                ", price=" + price +
+                ", state=" + state +
+                ", type=" + type +
+                '}';
+    }
 }

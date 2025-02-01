@@ -80,4 +80,18 @@ public class PackageDto {
     public void setType(PackageType type) {
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return "PackageDto{" + "\n" +
+                "sender=" + sender + "\n" +
+                "receiver=" + receiver + "\n" +
+                "address='" + address + '\'' + "\n" +
+                "weight=" + weight + "\n" +
+                "price=" + price + "\n" +
+                "state=" + state + "\n" +
+                "type=" + type + "\n" +
+                "}\n";
+    }
+
 }

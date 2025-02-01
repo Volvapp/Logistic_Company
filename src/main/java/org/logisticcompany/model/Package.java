@@ -6,7 +6,7 @@ import org.logisticcompany.model.enums.State;
 
 @Entity
 @Table(name = "packages")
-public class Package extends BaseEntity{
+public class Package extends BaseEntity {
     @ManyToOne
     private UserEntity sender;
     @ManyToOne
@@ -107,4 +107,4 @@ public class Package extends BaseEntity{
                 '}';
     }
 
-   }
+}

@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -66,10 +67,15 @@ public class PackageServiceImpl implements PackageService {
 
     @Override
     public String getAllRegisteredPackages() {
-
+        List<PackageDto> packageDtos = new ArrayList<>();
         List<Package> registered = this.packageRepository.findAllByType(PackageType.ACCEPTED);
 
-        return registered.toString();
+        for (Package pack : registered) {
+            packageDtos.add(this.modelMapper.map(pack, PackageDto.class));
+        }
+
+        return packageDtos.toString();
+
     }
 
     @Override
@@ -83,43 +89,64 @@ public class PackageServiceImpl implements PackageService {
         if (!roles.contains(Role.OFFICE_EMPLOYEE)) {
             return "Receiver is not an office employee";
         }
+        List<PackageDto> packageDtos = new ArrayList<>();
         List<Package> allByStateAndTypeAndReceiverId = this.packageRepository
                 .findAllByStateAndTypeAndReceiver_Id(State.NOT_DELIVERED, PackageType.ACCEPTED, receiverId);
 
 
+        for (Package pack : allByStateAndTypeAndReceiverId) {
+            packageDtos.add(this.modelMapper.map(pack, PackageDto.class));
+        }
 
-        return allByStateAndTypeAndReceiverId.toString();
+        return packageDtos.toString();
     }
 
     @Override
     public String getAllRegisteredNotDeliveredPackages() {
+        List<PackageDto> packageDtos = new ArrayList<>();
         List<Package> allByStateAndType = this.packageRepository.findAllByStateAndType(State.NOT_DELIVERED, PackageType.ACCEPTED);
 
 
-        return allByStateAndType.toString();
+        for (Package pack : allByStateAndType) {
+            packageDtos.add(this.modelMapper.map(pack, PackageDto.class));
+        }
+
+        return packageDtos.toString();
     }
 
     @Override
     public String getAllSentNotDeliveredPackages() {
-
+        List<PackageDto> packageDtos = new ArrayList<>();
         List<Package> packages = this.packageRepository.findAllByStateAndType(State.NOT_DELIVERED, PackageType.SENT);
 
-        return packages.toString();
+        for (Package pack : packages) {
+            packageDtos.add(this.modelMapper.map(pack, PackageDto.class));
+        }
+
+        return packageDtos.toString();
     }
 
     @Override
     public String getAllPackagesSentByClient(Long clientId) {
-
+        List<PackageDto> packageDtos = new ArrayList<>();
         List<Package> packages = this.packageRepository.findAllByTypeAndSender_Id(PackageType.SENT, clientId);
 
-        return packages.toString();
+        for (Package pack : packages) {
+            packageDtos.add(this.modelMapper.map(pack, PackageDto.class));
+        }
+
+        return packageDtos.toString();
     }
 
     @Override
     public String getAllPackagesReceivedByClient(Long clientId) {
-
+        List<PackageDto> packageDtos = new ArrayList<>();
         List<Package> packages = this.packageRepository.findAllByTypeAndReceiver_Id(PackageType.ACCEPTED, clientId);
 
-        return packages.toString();
+        for (Package pack : packages) {
+            packageDtos.add(this.modelMapper.map(pack, PackageDto.class));
+        }
+
+        return packageDtos.toString();
     }
 }

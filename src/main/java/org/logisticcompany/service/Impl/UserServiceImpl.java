@@ -80,19 +80,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getAllEmployees() {
-
+        List<UserDto> userDtos = new ArrayList<>();
         List<UserEntity> userEntitiesByRoles = this.userRepository
                 .findUserEntitiesByRoles(Set.of(Role.OFFICE_EMPLOYEE, Role.COURIER_EMPLOYEE));
 
+        for (UserEntity user : userEntitiesByRoles) {
+            userDtos.add(this.modelMapper.map(user, UserDto.class));
+        }
 
-        return userEntitiesByRoles.toString();
+        return userDtos.toString();
     }
 
     @Override
     public String getAllClients() {
+        List<UserDto> userDtos = new ArrayList<>();
         List<UserEntity> userEntitiesByRoles = this.userRepository.findUserEntitiesByRoles(Set.of(Role.CLIENT));
 
-        return userEntitiesByRoles.toString();
+        for (UserEntity user : userEntitiesByRoles) {
+            userDtos.add(this.modelMapper.map(user, UserDto.class));
+        }
+
+        return userDtos.toString();
     }
 
     @Override
@@ -154,5 +162,7 @@ public class UserServiceImpl implements UserService {
         ivan.getRoles().add(officeEmployeeRole);
         userRepository.save(ivan);
 
+        System.out.println(this.getAllEmployees());
+        System.out.println(this.getAllClients());
     }
 }

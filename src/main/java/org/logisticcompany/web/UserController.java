@@ -1,6 +1,5 @@
     package org.logisticcompany.web;
 
-    import jakarta.validation.Valid;
     import org.logisticcompany.model.binding.UserRegisterBindingModel;
     import org.logisticcompany.model.service.UserServiceModel;
     import org.logisticcompany.service.Impl.UserServiceImpl;
@@ -14,6 +13,8 @@
     import org.springframework.web.bind.annotation.PostMapping;
     import org.springframework.web.bind.annotation.RequestMapping;
     import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+    import javax.validation.Valid;
 
     @Controller
     @RequestMapping("/users")
@@ -45,10 +46,6 @@
         @GetMapping("/register")
         public String register(Model model){
 
-            if (!model.containsAttribute("userRegisterBindingModel")) {
-                model.addAttribute("userRegisterBindingModel", new UserRegisterBindingModel());
-            }
-
             if(!model.containsAttribute("isUserOrEmailOccupied")){
                 model.addAttribute("isUserOrEmailOccupied", false);
             }
@@ -79,5 +76,10 @@
             userService.registerUser(modelMapper.map(userRegisterBindingModel, UserServiceModel.class));
 
             return "redirect:/";
+        }
+
+        @ModelAttribute
+        public UserRegisterBindingModel userRegisterBindingModel(){
+            return new UserRegisterBindingModel();
         }
     }

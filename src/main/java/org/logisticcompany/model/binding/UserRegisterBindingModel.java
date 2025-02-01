@@ -1,8 +1,8 @@
 package org.logisticcompany.model.binding;
 
-import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 public class UserRegisterBindingModel {

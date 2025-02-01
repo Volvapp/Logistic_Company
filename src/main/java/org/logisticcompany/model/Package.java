@@ -1,9 +1,9 @@
 package org.logisticcompany.model;
 
-import jakarta.persistence.*;
 import org.logisticcompany.model.enums.PackageType;
 import org.logisticcompany.model.enums.State;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity

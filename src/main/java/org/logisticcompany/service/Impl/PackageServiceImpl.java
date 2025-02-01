@@ -166,7 +166,7 @@ public class PackageServiceImpl implements PackageService {
     public Double calculatePrice(Long packageId) {
         Package pack = this.packageRepository.findById(packageId).orElseThrow(() -> new RuntimeException("There is no such package"));
         List<Office> offices = this.officeRepository.findAll();
-        List<String> addresses = offices.stream().map(Office::getAddress).toList();
+        List<String> addresses = offices.stream().map(Office::getAddress).collect(Collectors.toList());
 
         if (!addresses.contains(pack.getAddress())){
             pack.setPrice(pack.getPrice() * TAX);

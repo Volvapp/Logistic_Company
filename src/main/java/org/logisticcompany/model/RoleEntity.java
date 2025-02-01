@@ -1,7 +1,8 @@
 package org.logisticcompany.model;
 
-import jakarta.persistence.*;
 import org.logisticcompany.model.enums.Role;
+
+import javax.persistence.*;
 
 @Entity
 

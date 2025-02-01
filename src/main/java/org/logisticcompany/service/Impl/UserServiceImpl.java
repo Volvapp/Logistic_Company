@@ -15,6 +15,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -35,11 +37,14 @@ public class UserServiceImpl implements UserService {
 
     private final LogisticCompanyUserServiceImpl logisticCompanyUserService;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, ModelMapper modelMapper, LogisticCompanyUserServiceImpl logisticCompanyUserService) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, ModelMapper modelMapper, LogisticCompanyUserServiceImpl logisticCompanyUserService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.modelMapper = modelMapper;
         this.logisticCompanyUserService = logisticCompanyUserService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -117,6 +122,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity userEntity = modelMapper.map(userServiceModel, UserEntity.class);
 
+        userEntity.setPassword(passwordEncoder.encode(userServiceModel.getPassword()));
         userEntity.setRoles(Set.of(clientRole));
 
         userEntity = userRepository.save(userEntity);
@@ -142,23 +148,23 @@ public class UserServiceImpl implements UserService {
         RoleEntity officeEmployeeRole = roleRepository.findByRole(Role.OFFICE_EMPLOYEE);
 
         UserEntity admin = new UserEntity("vladko", "Vlado", "Dobrev",
-                "1234", "vlado@gmail.com", 42, LocalDate.now(), "Armenia");
+                passwordEncoder.encode("1234"), "vlado@gmail.com", 42, LocalDate.now(), "Armenia");
         admin.getRoles().add(adminRole);
 
         userRepository.save(admin);
 
         UserEntity gosho = new UserEntity("Gosho", "Georgi", "Georgiev",
-                "3333", "gosho@abv.bg", 21, LocalDate.now(), "Cheeseburger");
+                passwordEncoder.encode("1234"), "gosho@abv.bg", 21, LocalDate.now(), "Cheeseburger");
         gosho.getRoles().add(clientRole);
         userRepository.save(gosho);
 
         UserEntity petur = new UserEntity("Pesho", "Petur", "Petrov",
-                "4444", "petur@abv.bg", 25, LocalDate.now(), "Pizza");
+                passwordEncoder.encode("1234"), "petur@abv.bg", 25, LocalDate.now(), "Pizza");
         petur.getRoles().add(courierEmployeeRole);
         userRepository.save(petur);
 
         UserEntity ivan = new UserEntity("Ivancho", "Ivan", "Ivanov",
-                "5555", "ivan@abv.bg", 30, LocalDate.now(), "Sushi");
+                passwordEncoder.encode("1234"), "ivan@abv.bg", 30, LocalDate.now(), "Sushi");
         ivan.getRoles().add(officeEmployeeRole);
         userRepository.save(ivan);
 

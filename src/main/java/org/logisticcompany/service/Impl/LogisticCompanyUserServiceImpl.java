@@ -31,16 +31,15 @@ public class LogisticCompanyUserServiceImpl implements UserDetailsService {
 
         return mapToUserDetails(entity);
     }
-
-    private static UserDetails mapToUserDetails(UserEntity userEntity) {
+    private static UserDetails mapToUserDetails(UserEntity user){
 
         List<GrantedAuthority> grantedAuthorities =
-                userEntity
+                user
                         .getRoles()
                         .stream()
                         .map(r -> new SimpleGrantedAuthority("ROLE_" + r.getRole().name()))
                         .collect(Collectors.toList());
 
-        return new User(userEntity.getUsername(), userEntity.getPassword(), grantedAuthorities);
+        return new User(user.getUsername(),user.getPassword(),grantedAuthorities);
     }
 }

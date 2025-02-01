@@ -106,4 +106,5 @@ public class Package extends BaseEntity{
                 ", type=" + type +
                 '}';
     }
-}
+
+   }

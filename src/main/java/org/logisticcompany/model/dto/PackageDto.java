@@ -3,21 +3,28 @@ package org.logisticcompany.model.dto;
 import org.logisticcompany.model.enums.PackageType;
 import org.logisticcompany.model.enums.State;
 
+import java.time.LocalDate;
+
 public class PackageDto {
     private UserDto sender;
     private UserDto receiver;
     private String address;
     private Double weight;
     private Double price;
-    private State state; // enum
-    private PackageType type; // enum
+    private LocalDate registrationDate;
+    private LocalDate arrivalDate;
+    private State state;
+    private PackageType type;
 
-    public PackageDto(UserDto sender, UserDto receiver, String address, Double weight, Double price, State state, PackageType type) {
+    public PackageDto(UserDto sender, UserDto receiver, String address, Double weight, Double price, LocalDate registrationDate,
+                      LocalDate arrivalDate, State state, PackageType type) {
         this.sender = sender;
         this.receiver = receiver;
         this.address = address;
         this.weight = weight;
         this.price = price;
+        this.registrationDate = registrationDate;
+        this.arrivalDate = arrivalDate;
         this.state = state;
         this.type = type;
     }
@@ -65,6 +72,22 @@ public class PackageDto {
         this.price = price;
     }
 
+    public LocalDate getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public LocalDate getArrivalDate() {
+        return arrivalDate;
+    }
+
+    public void setArrivalDate(LocalDate arrivalDate) {
+        this.arrivalDate = arrivalDate;
+    }
+
     public State getState() {
         return state;
     }
@@ -89,6 +112,8 @@ public class PackageDto {
                 "address='" + address + '\'' + "\n" +
                 "weight=" + weight + "\n" +
                 "price=" + price + "\n" +
+                "registration date=" + registrationDate + "\n" +
+                "arrival date=" + arrivalDate + "\n" +
                 "state=" + state + "\n" +
                 "type=" + type + "\n" +
                 "}\n";

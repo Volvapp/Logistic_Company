@@ -1,11 +1,13 @@
 package org.logisticcompany.service.Impl;
 
+import org.logisticcompany.model.Office;
 import org.logisticcompany.model.RoleEntity;
 import org.logisticcompany.model.UserEntity;
 import org.logisticcompany.model.dto.PackageDto;
 import org.logisticcompany.model.enums.PackageType;
 import org.logisticcompany.model.enums.Role;
 import org.logisticcompany.model.enums.State;
+import org.logisticcompany.repository.OfficeRepository;
 import org.logisticcompany.repository.PackageRepository;
 import org.logisticcompany.repository.UserRepository;
 import org.logisticcompany.service.PackageService;
@@ -23,13 +25,16 @@ import java.util.stream.Collectors;
 @Service
 public class PackageServiceImpl implements PackageService {
     private static final Logger log = LoggerFactory.getLogger(PackageServiceImpl.class);
+    private static final Double TAX = 1.15;
     private final PackageRepository packageRepository;
     private final UserRepository userRepository;
+    private final OfficeRepository officeRepository;
     private final ModelMapper modelMapper;
 
-    public PackageServiceImpl(PackageRepository packageRepository, UserRepository userRepository, ModelMapper modelMapper) {
+    public PackageServiceImpl(PackageRepository packageRepository, UserRepository userRepository, OfficeRepository officeRepository, ModelMapper modelMapper) {
         this.packageRepository = packageRepository;
         this.userRepository = userRepository;
+        this.officeRepository = officeRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -45,7 +50,14 @@ public class PackageServiceImpl implements PackageService {
 
     @Override
     public List<PackageDto> getPackages() {
-        return List.of();
+        List<PackageDto> packageDtos = new ArrayList<>();
+        List<Package> packages = this.packageRepository.findAll();
+
+        for (Package pack : packages) {
+            packageDtos.add(this.modelMapper.map(pack, PackageDto.class));
+        }
+
+        return packageDtos;
     }
 
     @Override
@@ -148,5 +160,42 @@ public class PackageServiceImpl implements PackageService {
         }
 
         return packageDtos.toString();
+    }
+
+    @Override
+    public Double calculatePrice(Long packageId) {
+        Package pack = this.packageRepository.findById(packageId).orElseThrow(() -> new RuntimeException("There is no such package"));
+        List<Office> offices = this.officeRepository.findAll();
+        List<String> addresses = offices.stream().map(Office::getAddress).toList();
+
+        if (!addresses.contains(pack.getAddress())){
+            pack.setPrice(pack.getPrice() * TAX);
+        }
+
+        return pack.getPrice();
+    }
+
+    @Override
+    public void initializePackages() {
+        UserEntity sender = this.userRepository.findById(2L).get(); // Assuming sender object is initialized
+        UserEntity receiver = this.userRepository.findById(4L).get(); // Assuming receiver object is initialized
+
+        Package package1 = new Package(sender, receiver, "123 Main St", 5.0, 100.0, State.DELIVERED, PackageType.SENT);
+        this.packageRepository.save(package1);
+        Package package2 = new Package(sender, receiver, "456 Oak Rd", 10.0, 150.0, State.NOT_DELIVERED, PackageType.SENT);
+        this.packageRepository.save(package2);
+        Package package3 = new Package(sender, receiver, "789 Pine Ave", 2.0, 50.0, State.DELIVERED, PackageType.ACCEPTED);
+        this.packageRepository.save(package3);
+        Package package4 = new Package(sender, receiver, "101 Maple Blvd", 8.0, 200.0, State.NOT_DELIVERED, PackageType.ACCEPTED);
+        this.packageRepository.save(package4);
+
+        System.out.println(this.getAllRegisteredPackages());
+        System.out.println(this.getAllRegisteredNotDeliveredPackages());
+        System.out.println(this.getAllPackagesReceivedByClient(3L));
+        System.out.println(this.getAllPackagesReceivedByClient(2L));
+        System.out.println(this.getAllPackagesSentByClient(3L));
+        System.out.println(this.getAllPackagesSentByClient(2L));
+        System.out.println(this.getAllRegisteredPackagesByReceiver(4L));
+        System.out.println(this.getAllRegisteredPackagesByReceiver(2L));
     }
 }

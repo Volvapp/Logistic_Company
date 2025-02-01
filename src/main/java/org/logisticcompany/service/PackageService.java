@@ -25,4 +25,9 @@ public interface PackageService {
     String getAllPackagesSentByClient(Long clientId);
 
     String getAllPackagesReceivedByClient(Long clientId);
+
+    Double calculatePrice(Long packageId);
+
+    void initializePackages();
+
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import org.logisticcompany.model.enums.PackageType;
 import org.logisticcompany.model.enums.State;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "packages")
 public class Package extends BaseEntity {
@@ -17,6 +19,10 @@ public class Package extends BaseEntity {
     private Double weight;
     @Column(name = "price")
     private Double price;
+    @Column(name = "registration_date", nullable = false)
+    private LocalDate registrationDate;
+    @Column(name = "arrival_date", nullable = false)
+    private LocalDate arrivalDate;
     @Enumerated(EnumType.STRING)
     @Column(name = "state", nullable = false)
     private State state;
@@ -30,6 +36,8 @@ public class Package extends BaseEntity {
         this.address = address;
         this.weight = weight;
         this.price = price;
+        this.registrationDate = LocalDate.now();
+        this.arrivalDate = LocalDate.now().plusDays(5);
         this.state = state;
         this.type = type;
     }
@@ -78,6 +86,22 @@ public class Package extends BaseEntity {
         this.price = price;
     }
 
+    public LocalDate getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public LocalDate getArrivalDate() {
+        return arrivalDate;
+    }
+
+    public void setArrivalDate(LocalDate arrivalDate) {
+        this.arrivalDate = arrivalDate;
+    }
+
     public State getState() {
         return state;
     }
@@ -102,6 +126,8 @@ public class Package extends BaseEntity {
                 ", address='" + address + '\'' +
                 ", weight=" + weight +
                 ", price=" + price +
+                ", registration date=" + registrationDate +
+                ", arrival date=" + arrivalDate +
                 ", state=" + state +
                 ", type=" + type +
                 '}';

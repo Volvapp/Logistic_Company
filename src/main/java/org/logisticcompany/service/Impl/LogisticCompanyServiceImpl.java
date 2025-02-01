@@ -1,6 +1,8 @@
 package org.logisticcompany.service.Impl;
 
 import org.logisticcompany.model.LogisticCompany;
+import org.logisticcompany.model.Office;
+import org.logisticcompany.model.Package;
 import org.logisticcompany.model.dto.LogisticCompanyDto;
 import org.logisticcompany.repository.LogisticCompanyRepository;
 import org.logisticcompany.service.LogisticCompanyService;
@@ -9,8 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -62,5 +66,16 @@ public class LogisticCompanyServiceImpl implements LogisticCompanyService {
     public void deleteCompany(Long id) {
         this.logisticCompanyRepository.deleteById(id);
         log.info(String.format("Company with id: %d deleted", id));
+    }
+
+    @Override
+    public Double getRevenueForTimePeriod(Long companyId, LocalDate start, LocalDate end) {
+        return this.logisticCompanyRepository.findById(companyId)
+                .map(logisticCompany -> logisticCompany.getOffices().stream()
+                        .flatMap(office -> office.getPackages().stream())
+                        .filter(pack -> !pack.getArrivalDate().isBefore(start) && !pack.getArrivalDate().isAfter(end))
+                        .mapToDouble(Package::getPrice)
+                        .sum())
+                .orElse(null);
     }
 }

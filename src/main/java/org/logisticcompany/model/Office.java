@@ -1,9 +1,6 @@
 package org.logisticcompany.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,18 +8,22 @@ import java.util.List;
 
 @Table(name = "offices")
 public class Office extends BaseEntity{
-    @Column(name = "address", nullable = false)
-    private String address;
     @Column(name = "phone", nullable = false)
     private String phone;
+    @Column(name = "address", nullable = false)
+    private String address;
+    @ManyToOne
+    private LogisticCompany logisticCompany;
     @OneToMany
     private List<Package> packages;
     @OneToMany
     private List<UserEntity> userEntities;
 
-    public Office(String phone, String address) {
+
+    public Office(String phone, String address, LogisticCompany logisticCompany) {
         this.phone = phone;
         this.address = address;
+        this.logisticCompany = logisticCompany;
         this.packages = new ArrayList<>();
         this.userEntities = new ArrayList<>();
     }
@@ -45,6 +46,14 @@ public class Office extends BaseEntity{
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public LogisticCompany getLogisticCompany() {
+        return logisticCompany;
+    }
+
+    public void setLogisticCompany(LogisticCompany logisticCompany) {
+        this.logisticCompany = logisticCompany;
     }
 
     public List<Package> getPackages() {

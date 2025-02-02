@@ -1,8 +1,14 @@
 package org.logisticcompany.service.Impl;
 
+import org.logisticcompany.model.LogisticCompany;
 import org.logisticcompany.model.Office;
+import org.logisticcompany.model.Package;
+import org.logisticcompany.model.UserEntity;
 import org.logisticcompany.model.dto.OfficeDto;
+import org.logisticcompany.repository.LogisticCompanyRepository;
 import org.logisticcompany.repository.OfficeRepository;
+import org.logisticcompany.repository.PackageRepository;
+import org.logisticcompany.repository.UserRepository;
 import org.logisticcompany.service.OfficeService;
 import org.logisticcompany.service.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
@@ -12,16 +18,23 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OfficeServiceImpl implements OfficeService {
     private static final Logger log = LoggerFactory.getLogger(OfficeServiceImpl.class);
     private final OfficeRepository officeRepository;
     private final ModelMapper modelMapper;
+    private final UserRepository userRepository;
+    private final PackageRepository packageRepository;
+    private final LogisticCompanyRepository logisticCompanyRepository;
 
-    public OfficeServiceImpl(OfficeRepository officeRepository, ModelMapper modelMapper) {
+    public OfficeServiceImpl(OfficeRepository officeRepository, ModelMapper modelMapper, UserRepository userRepository, PackageRepository packageRepository, LogisticCompanyRepository logisticCompanyRepository) {
         this.officeRepository = officeRepository;
         this.modelMapper = modelMapper;
+        this.userRepository = userRepository;
+        this.packageRepository = packageRepository;
+        this.logisticCompanyRepository = logisticCompanyRepository;
     }
 
     @Override
@@ -78,5 +91,29 @@ public class OfficeServiceImpl implements OfficeService {
 
         // Log office deletion
         log.info(String.format("Office with id: %d deleted", id));
+    }
+
+    @Override
+    public void initializeOffices() {
+        LogisticCompany logisticCompany = logisticCompanyRepository.findById(1L).get();
+
+        Package packageOne = packageRepository.findById(1L).get();
+        Package packageTwo = packageRepository.findById(2L).get();
+        Package packageThree = packageRepository.findById(3L).get();
+        Package packageFour = packageRepository.findById(4L).get();
+
+        UserEntity userEntityOfficeEmployee = userRepository.findById(3L).get();
+        UserEntity userEntityCourierEmployee = userRepository.findById(4L).get();
+
+        Office office = new Office("0885432544", "Plovdiv", logisticCompany);
+
+        office.setUserEntities(List.of(userEntityOfficeEmployee, userEntityCourierEmployee));
+        office.setPackages(List.of(packageOne, packageTwo, packageThree, packageFour));
+
+        officeRepository.save(office);
+
+        logisticCompany.getOffices().add(office);
+
+        logisticCompanyRepository.save(logisticCompany);
     }
 }

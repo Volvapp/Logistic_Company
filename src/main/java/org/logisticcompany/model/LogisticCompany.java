@@ -2,10 +2,7 @@ package org.logisticcompany.model;
 
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +13,7 @@ public class LogisticCompany extends BaseEntity {
     private String name;
     @Column(name = "revenue")
     private Double revenue;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Office> offices;
     @OneToMany
     private List<UserEntity> userEntities;

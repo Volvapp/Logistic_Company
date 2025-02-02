@@ -42,7 +42,7 @@ public class PackageController {
     }
 
     @PostMapping("/buy-package/{id}")
-    public String buyComputerConfirm(@PathVariable Long id, RedirectAttributes redirectAttributes, Principal principal) {
+    public String payPackageConfirm(@PathVariable Long id, RedirectAttributes redirectAttributes, Principal principal) {
 
         boolean canUserPayPackage = userService.pay(principal.getName(), id);
 

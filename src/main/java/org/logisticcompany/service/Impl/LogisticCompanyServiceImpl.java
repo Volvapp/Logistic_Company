@@ -1,10 +1,12 @@
 package org.logisticcompany.service.Impl;
 
 import org.logisticcompany.model.LogisticCompany;
-import org.logisticcompany.model.Office;
 import org.logisticcompany.model.Package;
+import org.logisticcompany.model.UserEntity;
 import org.logisticcompany.model.dto.LogisticCompanyDto;
 import org.logisticcompany.repository.LogisticCompanyRepository;
+import org.logisticcompany.repository.OfficeRepository;
+import org.logisticcompany.repository.UserRepository;
 import org.logisticcompany.service.LogisticCompanyService;
 import org.logisticcompany.service.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
@@ -22,10 +24,14 @@ public class LogisticCompanyServiceImpl implements LogisticCompanyService {
     private static final Logger log = LoggerFactory.getLogger(LogisticCompanyServiceImpl.class);
     private final LogisticCompanyRepository logisticCompanyRepository;
     private final ModelMapper modelMapper;
+    private final OfficeRepository officeRepository;
+    private final UserRepository userRepository;
 
-    public LogisticCompanyServiceImpl(LogisticCompanyRepository logisticCompanyRepository, ModelMapper modelMapper) {
+    public LogisticCompanyServiceImpl(LogisticCompanyRepository logisticCompanyRepository, ModelMapper modelMapper, OfficeRepository officeRepository, UserRepository userRepository) {
         this.logisticCompanyRepository = logisticCompanyRepository;
         this.modelMapper = modelMapper;
+        this.officeRepository = officeRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -97,5 +103,17 @@ public class LogisticCompanyServiceImpl implements LogisticCompanyService {
                         .mapToDouble(Package::getPrice)
                         .sum())
                 .orElse(null);
+    }
+
+    @Override
+    public void initializeLogisticCompanies() {
+        UserEntity userEntityOfficeEmployee = userRepository.findById(3L).get();
+        UserEntity userEntityCourierEmployee = userRepository.findById(4L).get();
+
+        LogisticCompany logisticCompany = new LogisticCompany("Speedy", 0.0);
+
+        logisticCompany.setUserEntities(List.of(userEntityOfficeEmployee, userEntityCourierEmployee));
+
+        logisticCompanyRepository.save(logisticCompany);
     }
 }

@@ -13,4 +13,6 @@ public interface OfficeService {
     Office updateOffice(OfficeDto officeDto, Long id);
 
     void deleteOffice(Long id);
+
+    void initializeOffices();
 }

@@ -47,7 +47,8 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PackageRepository packageRepository, ModelMapper modelMapper, LogisticCompanyUserServiceImpl logisticCompanyUserService, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PackageRepository packageRepository,
+                           ModelMapper modelMapper, LogisticCompanyUserServiceImpl logisticCompanyUserService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.packageRepository = packageRepository;
@@ -155,7 +156,8 @@ public class UserServiceImpl implements UserService {
             if (user.getBalance() >= pack.getPrice()) {
                 user.setBalance(user.getBalance() - pack.getPrice());
                 pack.setPackagePaidStatus(PackagePaidStatus.PAID);
-
+                // update company's revenue
+                user.getLogisticCompany().setRevenue(user.getLogisticCompany().getRevenue() + pack.getPrice());
                 // Save updated user and package
                 this.userRepository.save(user);
                 this.packageRepository.save(pack);

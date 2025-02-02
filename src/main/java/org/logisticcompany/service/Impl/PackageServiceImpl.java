@@ -4,10 +4,12 @@ import org.logisticcompany.model.Office;
 import org.logisticcompany.model.RoleEntity;
 import org.logisticcompany.model.UserEntity;
 import org.logisticcompany.model.dto.PackageDto;
+import org.logisticcompany.model.enums.PackagePaidStatus;
 import org.logisticcompany.model.enums.PackageType;
 import org.logisticcompany.model.enums.Role;
 import org.logisticcompany.model.enums.State;
 import org.logisticcompany.model.service.PackageServiceModel;
+import org.logisticcompany.model.view.ClientPackageDetailsView;
 import org.logisticcompany.repository.OfficeRepository;
 import org.logisticcompany.repository.PackageRepository;
 import org.logisticcompany.repository.UserRepository;
@@ -19,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +45,20 @@ public class PackageServiceImpl implements PackageService {
 
     @Override
     public Package createPackage(PackageServiceModel packageServiceModel, String userName) {
+        UserEntity sender = this.userRepository
+                .findByUsername(userName)
+                .orElseThrow(() -> new ObjectNotFoundException(String.format("User with name %s not found", userName)));
+
         Package pack = this.modelMapper.map(packageServiceModel, Package.class);
+
+        pack.setSender(sender);
+        pack.setReceiver(null);
+        pack.setCourier(null);
+
+        pack.setRegistrationDate(LocalDate.now());
+        pack.setArrivalDate(pack.getRegistrationDate().plusDays(5));
+        pack.setState(State.NOT_DELIVERED);
+        pack.setPackagePaidStatus(PackagePaidStatus.NON_PAID);
 
         this.packageRepository.save(pack);
         log.info("Package created");
@@ -180,15 +196,16 @@ public class PackageServiceImpl implements PackageService {
     @Override
     public void initializePackages() {
         UserEntity sender = this.userRepository.findById(2L).get(); // Assuming sender object is initialized
-        UserEntity receiver = this.userRepository.findById(4L).get(); // Assuming receiver object is initialized
+        UserEntity receiver = this.userRepository.findById(3L).get(); // Assuming receiver object is initialized
+        UserEntity courier = this.userRepository.findById(4L).get(); // Assuming courier object is initialized
 
-        Package package1 = new Package(sender, receiver, "123 Main St", 5.0, 100.0, PackageType.SENT);
+        Package package1 = new Package(sender, receiver, courier, "123 Main St", 5.0, 100.0, PackageType.SENT);
         this.packageRepository.save(package1);
-        Package package2 = new Package(sender, receiver, "456 Oak Rd", 10.0, 150.0,  PackageType.SENT);
+        Package package2 = new Package(sender, receiver, courier, "456 Oak Rd", 10.0, 150.0,  PackageType.SENT);
         this.packageRepository.save(package2);
-        Package package3 = new Package(sender, receiver, "789 Pine Ave", 2.0, 50.0, PackageType.ACCEPTED);
+        Package package3 = new Package(sender, receiver, courier, "789 Pine Ave", 2.0, 50.0, PackageType.ACCEPTED);
         this.packageRepository.save(package3);
-        Package package4 = new Package(sender, receiver, "101 Maple Blvd", 8.0, 200.0,  PackageType.ACCEPTED);
+        Package package4 = new Package(sender, receiver, courier, "101 Maple Blvd", 8.0, 200.0,  PackageType.ACCEPTED);
         this.packageRepository.save(package4);
 
         System.out.println(this.getAllRegisteredPackages());
@@ -199,5 +216,42 @@ public class PackageServiceImpl implements PackageService {
         System.out.println(this.getAllPackagesSentByClient(2L));
         System.out.println(this.getAllRegisteredPackagesByReceiver(4L));
         System.out.println(this.getAllRegisteredPackagesByReceiver(2L));
+    }
+
+    @Override
+    public List<ClientPackageDetailsView> findAllClientPackagesDetails(String username) {
+        List<Package> allBySender_username = packageRepository.findAllBySender_Username(username);
+        List<ClientPackageDetailsView> clientPackageDetailsViews = new ArrayList<>();
+
+        for (Package senderPackage : allBySender_username) {
+            ClientPackageDetailsView clientPackageDetailsView = new ClientPackageDetailsView();
+
+            clientPackageDetailsView.setId(senderPackage.getId());
+
+            if(senderPackage.getReceiver() == null){
+                clientPackageDetailsView.setReceiver("No Receiver");
+            } else {
+                clientPackageDetailsView.setReceiver(senderPackage.getReceiver().getFirstName() + " " + senderPackage.getReceiver().getLastName());
+            }
+
+            if(senderPackage.getCourier() == null){
+                clientPackageDetailsView.setCourier("No Courier");
+            } else {
+                clientPackageDetailsView.setCourier(senderPackage.getCourier().getFirstName() + " " + senderPackage.getCourier().getLastName());
+            }
+
+            clientPackageDetailsView.setAddress(senderPackage.getAddress());
+            clientPackageDetailsView.setWeight(senderPackage.getWeight());
+            clientPackageDetailsView.setPrice(senderPackage.getPrice());
+            clientPackageDetailsView.setRegistrationDate(senderPackage.getRegistrationDate());
+            clientPackageDetailsView.setArrivalDate(senderPackage.getArrivalDate());
+            clientPackageDetailsView.setState(senderPackage.getState().name());
+            clientPackageDetailsView.setType(senderPackage.getType().name());
+            clientPackageDetailsView.setPackagePaidStatus(senderPackage.getPackagePaidStatus().name());
+
+            clientPackageDetailsViews.add(clientPackageDetailsView);
+        }
+
+        return clientPackageDetailsViews;
     }
 }

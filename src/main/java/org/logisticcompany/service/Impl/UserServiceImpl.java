@@ -4,9 +4,11 @@ import org.logisticcompany.model.Package;
 import org.logisticcompany.model.RoleEntity;
 import org.logisticcompany.model.UserEntity;
 import org.logisticcompany.model.dto.UserDto;
+import org.logisticcompany.model.enums.PackagePaidStatus;
 import org.logisticcompany.model.enums.Role;
 import org.logisticcompany.model.enums.State;
 import org.logisticcompany.model.service.UserServiceModel;
+import org.logisticcompany.model.view.UserViewModel;
 import org.logisticcompany.repository.PackageRepository;
 import org.logisticcompany.model.view.UserBalanceViewModel;
 import org.logisticcompany.repository.RoleRepository;
@@ -25,6 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -130,6 +133,7 @@ public class UserServiceImpl implements UserService {
 
             if (user.getBalance() >= pack.getPrice()) {
                 user.setBalance(user.getBalance() - pack.getPrice());
+                pack.setPackagePaidStatus(PackagePaidStatus.PAID);
 
                 this.userRepository.save(user);
                 this.packageRepository.save(pack);
@@ -195,12 +199,12 @@ public class UserServiceImpl implements UserService {
 
         UserEntity petur = new UserEntity("Pesho", "Petur", "Petrov",
                 passwordEncoder.encode("1234"), "petur@abv.bg", 300.0, 25, LocalDate.now(), "Pizza");
-        petur.getRoles().add(courierEmployeeRole);
+        petur.getRoles().add(officeEmployeeRole);
         userRepository.save(petur);
 
         UserEntity ivan = new UserEntity("Ivancho", "Ivan", "Ivanov",
                 passwordEncoder.encode("1234"), "ivan@abv.bg", 465.3, 30, LocalDate.now(), "Sushi");
-        ivan.getRoles().add(officeEmployeeRole);
+        ivan.getRoles().add(courierEmployeeRole);
         userRepository.save(ivan);
 
         System.out.println(this.getAllEmployees());
@@ -209,9 +213,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserBalanceViewModel getLoggedUserInfo(String name) {
-        //TODO WAIT KRIS
         UserEntity user = userRepository.findByUsername(name).orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
         return modelMapper.map(user, UserBalanceViewModel.class);
+    }
+
+    @Override
+    public UserViewModel getUserInfo(String username) {
+        return userRepository
+                .findByUsername(username)
+                .map(userEntity -> modelMapper.map(userEntity, UserViewModel.class))
+                .orElseThrow(() -> new ObjectNotFoundException("User with name " + username + " not found!"));
+    }
+
+    @Override
+    public void addMoneyToUser(String username) {
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new ObjectNotFoundException("User not found"));
+
+        double balance = user.getBalance();
+
+        balance += 1000;
+
+        user.setBalance(balance);
+
+        userRepository.save(user);
     }
 }

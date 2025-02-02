@@ -15,6 +15,7 @@
     import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
     import javax.validation.Valid;
+    import java.security.Principal;
 
     @Controller
     @RequestMapping("/users")
@@ -76,6 +77,22 @@
             userService.registerUser(modelMapper.map(userRegisterBindingModel, UserServiceModel.class));
 
             return "redirect:/";
+        }
+
+        @GetMapping("/profile")
+        public String profile(Model model, Principal principal){
+
+            model.addAttribute("info", userService.getUserInfo(principal.getName()));
+
+            return "profile";
+        }
+
+        @GetMapping("/profile/add-money")
+        public String addMoney(Principal principal){
+
+            userService.addMoneyToUser(principal.getName());
+
+            return "redirect:/users/profile";
         }
 
         @ModelAttribute

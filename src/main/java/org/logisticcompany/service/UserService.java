@@ -4,6 +4,7 @@ import org.logisticcompany.model.UserEntity;
 import org.logisticcompany.model.dto.UserDto;
 import org.logisticcompany.model.service.UserServiceModel;
 import org.logisticcompany.model.view.UserBalanceViewModel;
+import org.logisticcompany.model.view.UserViewModel;
 
 import java.util.List;
 
@@ -29,4 +30,8 @@ public interface UserService {
     void initializeUsers();
 
     UserBalanceViewModel getLoggedUserInfo(String name);
+
+    UserViewModel getUserInfo(String name);
+
+    void addMoneyToUser(String name);
 }

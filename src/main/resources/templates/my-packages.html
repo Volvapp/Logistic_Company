@@ -52,72 +52,81 @@
 
 <nav th:replace="/fragments/commons :: navigation"></nav>
 
-<div class="container mt-3">
-    <table class="table table-hover table-yellow-fade">
-        <thead class="table-warning">
-        <tr>
-            <th scope="col"><strong>Receiver</strong></th>
-            <th scope="col"><strong>Courier</strong></th>
-            <th scope="col"><strong>Address</strong></th>
-            <th scope="col"><strong>Weight</strong></th>
-            <th scope="col"><strong>Price</strong></th>
-            <th scope="col"><strong>Registration Date</strong></th>
-            <th scope="col"><strong>Arrival Date</strong></th>
-            <th scope="col"><strong>Package State</strong></th>
-            <th scope="col"><strong>Package Type</strong></th>
-            <th scope="col"><strong>Actions</strong></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>John Doe</td>
-            <td>FedEx</td>
-            <td>123 Main St</td>
-            <td>2kg</td>
-            <td>$10.00</td>
-            <td>2024-01-15</td>
-            <td>2024-01-20</td>
-            <td>In Transit</td>
-            <td>Box</td>
-            <td>
-                <a href="#" class="btn btn-sm btn-success" onclick="showPopup()">Pay</a>
-            </td>
-        </tr>
-        <tr>
-            <td>Mary Moe</td>
-            <td>DHL</td>
-            <td>456 Elm St</td>
-            <td>5kg</td>
-            <td>$25.00</td>
-            <td>2024-01-10</td>
-            <td>2024-01-18</td>
-            <td>Delivered</td>
-            <td>Envelope</td>
-            <td>
-                <a href="#" class="btn btn-sm btn-success" onclick="showPopup()">Pay</a>
-            </td>
-        </tr>
-        <tr>
-            <td>July Dooley</td>
-            <td>UPS</td>
-            <td>789 Oak St</td>
-            <td>1.5kg</td>
-            <td>$8.00</td>
-            <td>2024-01-12</td>
-            <td>2024-01-22</td>
-            <td>Pending</td>
-            <td>Parcel</td>
-            <td>
-                <a th:href="@{/packages/buy-package/{id}(id = ${packageDetails.id})}" th:method="post" class="btn btn-sm btn-success" onclick="showPopup()">Pay</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+<th:block th:if="${clientPackagesDetails.size() == 0}">
+    <div class="container-fluid mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card bg-danger">
+
+                    <div class="card-body cart">
+                        <div class="col-sm-12 empty-cart-cls text-center"><img src="https://i.imgur.com/dCdflKN.png"
+                                                                               width="130" height="130"
+                                                                               class="img-fluid mb-4 mr-3">
+                            <h3><strong class="text-white">NO PACKAGES AVAILABLE</strong></h3>
+                            <h4 class="text-white">Come back later to check if you have packages</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block th:unless="${clientPackagesDetails.size() == 0}">
+    <div class="container mt-3">
+        <table class="table table-hover table-yellow-fade">
+            <thead class="table-warning">
+            <tr>
+                <th scope="col"><strong>Receiver</strong></th>
+                <th scope="col"><strong>Courier</strong></th>
+                <th scope="col"><strong>Address</strong></th>
+                <th scope="col"><strong>Weight</strong></th>
+                <th scope="col"><strong>Price</strong></th>
+                <th scope="col"><strong>Registration Date</strong></th>
+                <th scope="col"><strong>Arrival Date</strong></th>
+                <th scope="col"><strong>Package State</strong></th>
+                <th scope="col"><strong>Package Type</strong></th>
+                <th scope="col"><strong>Package Paid Status</strong></th>
+                <th scope="col"><strong>Actions</strong></th>
+            </tr>
+            </thead>
+            <tbody th:each="c : ${clientPackagesDetails}" th:object="${c}">
+            <tr>
+                <td th:text="*{receiver}"></td>
+                <td th:text="*{courier}"></td>
+                <td th:text="*{address}"></td>
+                <td th:text="*{weight}"></td>
+                <td th:text="|$*{price}|"></td>
+                <td th:text="*{registrationDate}"></td>
+                <td th:text="*{arrivalDate}"></td>
+                <td th:text="*{state}"></td>
+                <td th:text="*{type}"></td>
+                <td th:text="*{packagePaidStatus}"></td>
+                <td>
+                    <th:block th:unless="${c.packagePaidStatus == 'PAID'}">
+                        <form th:action="@{/packages/buy-package/{id}(id = *{id})}" method="post"
+                              style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-success">Pay</button>
+                        </form>
+                    </th:block>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</th:block>
+
+
 <!--TODO ADD BOOLEAN th:if="${!canUserPay}"-->
-<div id="paymentPopup" class="popup" >
+<div id="paymentPopup" class="popup" th:if="${!canUserPay}">
     <p>You don't have enough money to pay for this package!</p>
     <button onclick="closePopup()">Close</button>
+</div>
+
+<div id="paymentPopupSuccess" class="popup" th:if="${canUserPay}">
+    <p>You paid successfully!</p>
+    <button onclick="closePopupSuccess()">Close</button>
 </div>
 
 <script>
@@ -130,6 +139,13 @@
 
     function closePopup() {
         var popup = document.getElementById("paymentPopup");
+        if (popup) {
+            popup.style.display = "none";
+        }
+    }
+
+    function closePopupSuccess() {
+        var popup = document.getElementById("paymentPopupSuccess");
         if (popup) {
             popup.style.display = "none";
         }

@@ -3,6 +3,7 @@ package org.logisticcompany.service;
 import org.logisticcompany.model.dto.PackageDto;
 import org.logisticcompany.model.Package;
 import org.logisticcompany.model.service.PackageServiceModel;
+import org.logisticcompany.model.view.ClientPackageDetailsView;
 
 import java.util.List;
 
@@ -30,4 +31,6 @@ public interface PackageService {
     Double calculatePrice(Long packageId);
 
     void initializePackages();
+
+    List<ClientPackageDetailsView> findAllClientPackagesDetails(String username);
 }

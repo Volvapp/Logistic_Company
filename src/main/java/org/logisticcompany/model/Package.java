@@ -1,5 +1,6 @@
 package org.logisticcompany.model;
 
+import org.logisticcompany.model.enums.PackagePaidStatus;
 import org.logisticcompany.model.enums.PackageType;
 import org.logisticcompany.model.enums.State;
 
@@ -13,6 +14,8 @@ public class Package extends BaseEntity {
     private UserEntity sender;
     @ManyToOne
     private UserEntity receiver;
+    @ManyToOne
+    private UserEntity courier;
     @Column(name = "address", nullable = false)
     private String address;
     @Column(name = "weight", nullable = false)
@@ -30,9 +33,14 @@ public class Package extends BaseEntity {
     @Column(name = "type", nullable = false)
     private PackageType type;
 
-    public Package(UserEntity sender, UserEntity receiver, String address, Double weight, Double price, PackageType type) {
+    @Enumerated(EnumType.STRING)
+    @Column(name = "package_paid_status", nullable = false)
+    private PackagePaidStatus packagePaidStatus;
+
+    public Package(UserEntity sender, UserEntity receiver, UserEntity courier, String address, Double weight, Double price, PackageType type) {
         this.sender = sender;
         this.receiver = receiver;
+        this.courier = courier;
         this.address = address;
         this.weight = weight;
         this.price = price;
@@ -40,6 +48,7 @@ public class Package extends BaseEntity {
         this.arrivalDate = LocalDate.now().plusDays(5);
         this.state = State.NOT_DELIVERED;
         this.type = type;
+        this.packagePaidStatus = PackagePaidStatus.NON_PAID;
     }
 
     public Package() {
@@ -118,11 +127,28 @@ public class Package extends BaseEntity {
         this.type = type;
     }
 
+    public UserEntity getCourier() {
+        return courier;
+    }
+
+    public void setCourier(UserEntity courier) {
+        this.courier = courier;
+    }
+
+    public PackagePaidStatus getPackagePaidStatus() {
+        return packagePaidStatus;
+    }
+
+    public void setPackagePaidStatus(PackagePaidStatus packagePaidStatus) {
+        this.packagePaidStatus = packagePaidStatus;
+    }
+
     @Override
     public String toString() {
         return "Package{" +
                 "sender=" + sender +
                 ", receiver=" + receiver +
+                ", courier=" + courier +
                 ", address='" + address + '\'' +
                 ", weight=" + weight +
                 ", price=" + price +
@@ -130,6 +156,7 @@ public class Package extends BaseEntity {
                 ", arrival date=" + arrivalDate +
                 ", state=" + state +
                 ", type=" + type +
+                ", package paid status=" + packagePaidStatus +
                 '}';
     }
 

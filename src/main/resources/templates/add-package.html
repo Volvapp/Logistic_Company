@@ -33,12 +33,6 @@
       </div>
       <div class="form-row m-5">
         <div class="col">
-          <label for="registrationDate">Registration Date</label>
-          <input th:field="*{registrationDate}" th:errorclass="bg-danger" name="registrationDate" id="registrationDate" type="date" class="form-control" placeholder="Registration Date">
-          <small th:if="${#fields.hasErrors('registrationDate')}" id="registrationDateError" class="form-text text-light  bg-danger rounded">Date cannot be in the
-            future</small>
-        </div>
-        <div class="col">
           <label for="type">Package Type</label>
           <select th:field="*{type}" th:errorclass="bg-danger" name="type" id="type" class="custom-select">
             <option value="" selected>Select Package Type</option>

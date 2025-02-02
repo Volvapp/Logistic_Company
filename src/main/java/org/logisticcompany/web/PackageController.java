@@ -30,12 +30,12 @@ public class PackageController {
     }
 
     @GetMapping("/my-packages")
-    public String myPackages(Model model) {
+    public String myPackages(Model model, Principal principal) {
 
-        //model.addAttribute("packagesDetails", packageService.findAll());
+        model.addAttribute("clientPackagesDetails", packageService.findAllClientPackagesDetails(principal.getName()));
 
-        if (!model.containsAttribute("canUserBuy")) {
-            model.addAttribute("canUserBuy", true);
+        if (!model.containsAttribute("canUserPay")) {
+            model.addAttribute("canUserPay", true);
         }
 
         return "my-packages";
@@ -44,17 +44,15 @@ public class PackageController {
     @PostMapping("/buy-package/{id}")
     public String buyComputerConfirm(@PathVariable Long id, RedirectAttributes redirectAttributes, Principal principal) {
 
-//        boolean canUserPayPackage = userService.canUserPayPackage(principal.getName(), id);
-//
-//        if (!canUserPayPackage) {
-//            redirectAttributes.addFlashAttribute("canUserBuy", false);
-//
-//            return "redirect:/packages/my-packages";
-//        }
-//
-//        userService.payPackage(principal.getName(), id);
+        boolean canUserPayPackage = userService.pay(principal.getName(), id);
 
-        return "redirect:/packages/my-packages";
+        if (!canUserPayPackage) {
+            redirectAttributes.addFlashAttribute("canUserPay", false);
+
+            return "redirect:/packages/my-packages";
+        }
+
+        return "redirect:/";
     }
 
     @GetMapping("/add-package")

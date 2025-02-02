@@ -18,5 +18,7 @@ public interface PackageRepository extends JpaRepository<Package, Long> {
 
     List<Package> findAllByTypeAndSender_Id(PackageType type, Long senderId);
 
+    List<Package> findAllBySender_Username(String senderUsername);
+
     List<Package> findAllByTypeAndReceiver_Id(PackageType type, Long receiverId);
 }

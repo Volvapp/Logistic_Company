@@ -1,5 +1,6 @@
 package org.logisticcompany.model.dto;
 
+import org.logisticcompany.model.enums.PackagePaidStatus;
 import org.logisticcompany.model.enums.PackageType;
 import org.logisticcompany.model.enums.State;
 
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 public class PackageDto {
     private UserDto sender;
     private UserDto receiver;
+    private UserDto courier;
     private String address;
     private Double weight;
     private Double price;
@@ -15,11 +17,13 @@ public class PackageDto {
     private LocalDate arrivalDate;
     private State state;
     private PackageType type;
+    private PackagePaidStatus packagePaidStatus;
 
-    public PackageDto(UserDto sender, UserDto receiver, String address, Double weight, Double price, LocalDate registrationDate,
-                      LocalDate arrivalDate, State state, PackageType type) {
+    public PackageDto(UserDto sender, UserDto receiver, UserDto courier, String address, Double weight, Double price, LocalDate registrationDate,
+                      LocalDate arrivalDate, State state, PackageType type, PackagePaidStatus packagePaidStatus) {
         this.sender = sender;
         this.receiver = receiver;
+        this.courier = courier;
         this.address = address;
         this.weight = weight;
         this.price = price;
@@ -27,6 +31,7 @@ public class PackageDto {
         this.arrivalDate = arrivalDate;
         this.state = state;
         this.type = type;
+        this.packagePaidStatus = packagePaidStatus;
     }
 
     public PackageDto() {
@@ -104,6 +109,22 @@ public class PackageDto {
         this.type = type;
     }
 
+    public UserDto getCourier() {
+        return courier;
+    }
+
+    public void setCourier(UserDto courier) {
+        this.courier = courier;
+    }
+
+    public PackagePaidStatus getPackagePaidStatus() {
+        return packagePaidStatus;
+    }
+
+    public void setPackagePaidStatus(PackagePaidStatus packagePaidStatus) {
+        this.packagePaidStatus = packagePaidStatus;
+    }
+
     @Override
     public String toString() {
         return "PackageDto{" + "\n" +
@@ -116,6 +137,7 @@ public class PackageDto {
                 "arrival date=" + arrivalDate + "\n" +
                 "state=" + state + "\n" +
                 "type=" + type + "\n" +
+                "package paid status=" + packagePaidStatus + "\n" +
                 "}\n";
     }
 

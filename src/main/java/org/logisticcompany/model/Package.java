@@ -71,6 +71,15 @@ public class Package extends BaseEntity {
         this.receiver = receiver;
     }
 
+    public UserEntity getCourier() {
+        return courier;
+    }
+
+    public void setCourier(UserEntity courier) {
+        this.courier = courier;
+    }
+
+
     public String getAddress() {
         return address;
     }
@@ -127,13 +136,6 @@ public class Package extends BaseEntity {
         this.type = type;
     }
 
-    public UserEntity getCourier() {
-        return courier;
-    }
-
-    public void setCourier(UserEntity courier) {
-        this.courier = courier;
-    }
 
     public PackagePaidStatus getPackagePaidStatus() {
         return packagePaidStatus;

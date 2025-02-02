@@ -28,7 +28,7 @@ public interface PackageService {
 
     String getAllPackagesReceivedByClient(Long clientId);
 
-    Double calculatePrice(Long packageId);
+    Double calculatePrice(Package pack);
 
     void initializePackages();
 

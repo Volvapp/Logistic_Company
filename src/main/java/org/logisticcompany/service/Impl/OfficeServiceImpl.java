@@ -4,6 +4,7 @@ import org.logisticcompany.model.Office;
 import org.logisticcompany.model.dto.OfficeDto;
 import org.logisticcompany.repository.OfficeRepository;
 import org.logisticcompany.service.OfficeService;
+import org.logisticcompany.service.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +50,7 @@ public class OfficeServiceImpl implements OfficeService {
 
         Office office = this.officeRepository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("Office not found"));
+                .orElseThrow(() -> new ObjectNotFoundException("Office not found"));
 
         this.modelMapper.map(officeDto, office);
 

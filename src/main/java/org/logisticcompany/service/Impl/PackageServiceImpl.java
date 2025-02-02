@@ -11,6 +11,7 @@ import org.logisticcompany.repository.OfficeRepository;
 import org.logisticcompany.repository.PackageRepository;
 import org.logisticcompany.repository.UserRepository;
 import org.logisticcompany.service.PackageService;
+import org.logisticcompany.service.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.logisticcompany.model.Package;
 import org.slf4j.Logger;
@@ -64,7 +65,7 @@ public class PackageServiceImpl implements PackageService {
     public Package updatePackage(PackageDto packageDto, Long id) {
         Package pack = this.packageRepository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException(String.format("Package with id %d not found", id)));
+                .orElseThrow(() -> new ObjectNotFoundException(String.format("Package with id %d not found", id)));
         this.modelMapper.map(packageDto, pack);
         this.packageRepository.save(pack);
         log.info(String.format("Package with id %d updated", pack.getId()));
@@ -95,7 +96,7 @@ public class PackageServiceImpl implements PackageService {
 
         UserEntity receiver = this.userRepository
                 .findById(receiverId)
-                .orElseThrow(() -> new RuntimeException(String.format("Receiver with id %d not found", receiverId)));
+                .orElseThrow(() -> new ObjectNotFoundException(String.format("Receiver with id %d not found", receiverId)));
         Set<Role> roles = receiver.getRoles().stream().map(RoleEntity::getRole).collect(Collectors.toSet());
 
         if (!roles.contains(Role.OFFICE_EMPLOYEE)) {
@@ -164,7 +165,7 @@ public class PackageServiceImpl implements PackageService {
 
     @Override
     public Double calculatePrice(Long packageId) {
-        Package pack = this.packageRepository.findById(packageId).orElseThrow(() -> new RuntimeException("There is no such package"));
+        Package pack = this.packageRepository.findById(packageId).orElseThrow(() -> new ObjectNotFoundException("There is no such package"));
         List<Office> offices = this.officeRepository.findAll();
         List<String> addresses = offices.stream().map(Office::getAddress).collect(Collectors.toList());
 

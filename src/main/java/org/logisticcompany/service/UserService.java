@@ -21,6 +21,8 @@ public interface UserService {
 
     String getAllClients();
 
+    void pay(String username, Long packageId);
+
     boolean isUserExistingByEmailOrUsername(String email, String username);
 
     void registerUser(UserServiceModel userServiceModel);

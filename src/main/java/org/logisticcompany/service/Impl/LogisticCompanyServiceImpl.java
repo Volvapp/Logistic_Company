@@ -6,6 +6,7 @@ import org.logisticcompany.model.Package;
 import org.logisticcompany.model.dto.LogisticCompanyDto;
 import org.logisticcompany.repository.LogisticCompanyRepository;
 import org.logisticcompany.service.LogisticCompanyService;
+import org.logisticcompany.service.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +54,7 @@ public class LogisticCompanyServiceImpl implements LogisticCompanyService {
     public LogisticCompany updateCompany(LogisticCompanyDto companyDto, Long id) {
         LogisticCompany logisticCompany = this.logisticCompanyRepository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException(String.format("No company found with id: %d", id)));
+                .orElseThrow(() -> new ObjectNotFoundException(String.format("No company found with id: %d", id)));
 
         this.modelMapper.map(companyDto, logisticCompany);
 

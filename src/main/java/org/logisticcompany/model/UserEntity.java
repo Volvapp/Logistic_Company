@@ -19,6 +19,8 @@ public class UserEntity extends BaseEntity {
     private String password;
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+    @Column(name = "balance")
+    private Double balance;
     @Column(name = "age")
     private Integer age;
     @Column(name = "born_on")
@@ -28,12 +30,14 @@ public class UserEntity extends BaseEntity {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<RoleEntity> roles;
 
-    public UserEntity(String username, String firstName, String lastName, String password, String email, Integer age, LocalDate bornOn, String country) {
+    public UserEntity(String username, String firstName, String lastName, String password, String email,
+                      Double balance, Integer age, LocalDate bornOn, String country) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.email = email;
+        this.balance = balance;
         this.age = age;
         this.bornOn = bornOn;
         this.country = country;
@@ -88,6 +92,14 @@ public class UserEntity extends BaseEntity {
         this.email = email;
     }
 
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
     public Integer getAge() {
         return age;
     }
@@ -124,6 +136,7 @@ public class UserEntity extends BaseEntity {
                 ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", balance='" + balance + '\'' +
                 ", age=" + age +
                 ", bornOn=" + bornOn +
                 ", country='" + country + '\'' +

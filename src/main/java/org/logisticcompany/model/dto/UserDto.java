@@ -10,17 +10,20 @@ public class UserDto {
     private String lastName;
     private String password;
     private String email;
+    private Double balance;
     private Integer age;
     private LocalDate bornOn;
     private String country;
     private Set<RoleDto> roles;
 
-    public UserDto(String username, String firstName, String lastName, String password, String email, Integer age, LocalDate bornOn, String country) {
+    public UserDto(String username, String firstName, String lastName, String password, String email,
+                   Double balance, Integer age, LocalDate bornOn, String country) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.email = email;
+        this.balance = balance;
         this.age = age;
         this.bornOn = bornOn;
         this.country = country;
@@ -70,6 +73,14 @@ public class UserDto {
         this.email = email;
     }
 
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
     public Integer getAge() {
         return age;
     }
@@ -110,6 +121,7 @@ public class UserDto {
                 "lastName='" + lastName + '\'' + "\n" +
                 "password='" + password + '\'' + "\n" +
                 "email='" + email + '\'' + "\n" +
+                "balance='" + balance + '\'' + "\n" +
                 "age=" + age + "\n" +
                 "bornOn=" + bornOn + "\n" +
                 "country='" + country + '\'' + "\n" +

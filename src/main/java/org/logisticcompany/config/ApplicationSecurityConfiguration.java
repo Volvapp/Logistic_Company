@@ -1,6 +1,7 @@
 package org.logisticcompany.config;
 
 
+import org.logisticcompany.model.enums.Role;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -27,6 +28,9 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .antMatchers("/", "/users/login", "/users/register").permitAll()
+                .antMatchers("/admin").hasRole(Role.ADMIN.name())
+                .antMatchers("/admin/createCompany").hasRole(Role.ADMIN.name())
+                .antMatchers("/admin/createEmployee").hasRole(Role.ADMIN.name())
                 .antMatchers("/**").authenticated()
                 .and()
                 .formLogin()
@@ -41,6 +45,18 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID");
+
+//         /home(OfficeEmployeeLogicForAcceptingPackages(table) (Assign to a free courier) -> role office_employee,
+//               CourierEmployeeLogicForDelivering(table) -> role courier_employee,
+//               ClientLogicForSendingOrAcceptingPackage -> role client)
+//         /home/createPackage (role -> client)
+//         /admin(Managing companies and employees (read, delete))
+//         /admin/createCompany
+//         /admin/updateCompany{id}
+//         /admin/createEmployee
+//         /admin/updateEmployee/{id}
+//         /login
+//         /register
     }
 
     @Override

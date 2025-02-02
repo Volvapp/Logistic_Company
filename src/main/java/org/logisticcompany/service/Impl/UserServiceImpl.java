@@ -8,6 +8,7 @@ import org.logisticcompany.model.enums.Role;
 import org.logisticcompany.model.enums.State;
 import org.logisticcompany.model.service.UserServiceModel;
 import org.logisticcompany.repository.PackageRepository;
+import org.logisticcompany.model.view.UserBalanceViewModel;
 import org.logisticcompany.repository.RoleRepository;
 import org.logisticcompany.repository.UserRepository;
 import org.logisticcompany.service.UserService;
@@ -204,5 +205,13 @@ public class UserServiceImpl implements UserService {
 
         System.out.println(this.getAllEmployees());
         System.out.println(this.getAllClients());
+    }
+
+    @Override
+    public UserBalanceViewModel getLoggedUserInfo(String name) {
+        //TODO WAIT KRIS
+        UserEntity user = userRepository.findByUsername(name).orElseThrow(() -> new ObjectNotFoundException("User not found"));
+
+        return modelMapper.map(user, UserBalanceViewModel.class);
     }
 }

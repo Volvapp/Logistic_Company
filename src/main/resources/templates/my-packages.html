@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/commons :: head"></head>
+<style>
+    .table-yellow-fade tbody tr {
+        background-color: #fff3cd;
+        transition: background-color 0.3s ease;
+    }
+
+    .table-yellow-fade tbody tr:hover {
+        background-color: #ffeeba;
+    }
+
+    .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #f8d7da;
+        padding: 20px;
+        border: 2px solid #721c24;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        text-align: center;
+        width: 300px;
+    }
+
+    .popup p {
+        background-color: #f5c6cb;
+        color: #721c24;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .popup button {
+        background-color: #721c24;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin-top: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .popup button:hover {
+        background-color: #5a1a1f;
+    }
+</style>
+<body>
+
+<nav th:replace="/fragments/commons :: navigation"></nav>
+
+<div class="container mt-3">
+    <table class="table table-hover table-yellow-fade">
+        <thead class="table-warning">
+        <tr>
+            <th scope="col"><strong>Receiver</strong></th>
+            <th scope="col"><strong>Courier</strong></th>
+            <th scope="col"><strong>Address</strong></th>
+            <th scope="col"><strong>Weight</strong></th>
+            <th scope="col"><strong>Price</strong></th>
+            <th scope="col"><strong>Registration Date</strong></th>
+            <th scope="col"><strong>Arrival Date</strong></th>
+            <th scope="col"><strong>Package State</strong></th>
+            <th scope="col"><strong>Package Type</strong></th>
+            <th scope="col"><strong>Actions</strong></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>John Doe</td>
+            <td>FedEx</td>
+            <td>123 Main St</td>
+            <td>2kg</td>
+            <td>$10.00</td>
+            <td>2024-01-15</td>
+            <td>2024-01-20</td>
+            <td>In Transit</td>
+            <td>Box</td>
+            <td>
+                <a href="#" class="btn btn-sm btn-success" onclick="showPopup()">Pay</a>
+            </td>
+        </tr>
+        <tr>
+            <td>Mary Moe</td>
+            <td>DHL</td>
+            <td>456 Elm St</td>
+            <td>5kg</td>
+            <td>$25.00</td>
+            <td>2024-01-10</td>
+            <td>2024-01-18</td>
+            <td>Delivered</td>
+            <td>Envelope</td>
+            <td>
+                <a href="#" class="btn btn-sm btn-success" onclick="showPopup()">Pay</a>
+            </td>
+        </tr>
+        <tr>
+            <td>July Dooley</td>
+            <td>UPS</td>
+            <td>789 Oak St</td>
+            <td>1.5kg</td>
+            <td>$8.00</td>
+            <td>2024-01-12</td>
+            <td>2024-01-22</td>
+            <td>Pending</td>
+            <td>Parcel</td>
+            <td>
+                <a th:href="@{/packages/buy-package/{id}(id = ${packageDetails.id})}" th:method="post" class="btn btn-sm btn-success" onclick="showPopup()">Pay</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<!--TODO ADD BOOLEAN th:if="${!canUserPay}"-->
+<div id="paymentPopup" class="popup" >
+    <p>You don't have enough money to pay for this package!</p>
+    <button onclick="closePopup()">Close</button>
+</div>
+
+<script>
+    function showPopup() {
+        var popup = document.getElementById("paymentPopup");
+        if (popup) {
+            popup.style.display = "block";
+        }
+    }
+
+    function closePopup() {
+        var popup = document.getElementById("paymentPopup");
+        if (popup) {
+            popup.style.display = "none";
+        }
+    }
+</script>
+
+<footer th:replace="/fragments/footer-fixed-bottom :: footer-fixed-bottom"></footer>
+
+</body>
+</html>

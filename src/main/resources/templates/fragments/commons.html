@@ -21,7 +21,7 @@
 <nav style="background-color: rgb(151 203 200);" th:fragment="navigation" class="navbar navbar-expand-lg navbar-light bg-blur ">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
-            <img src="/images/navlogo.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
+            <img src="/images/truck.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
             Logistic Company
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -30,54 +30,32 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <th:block sec:authorize="isAuthenticated()">
-                    <a class="nav-link" aria-current="page" th:href="@{/home}">Home</a>
-                    <a class="nav-link" th:href="@{/users/my-coupons}">MyCoupons</a>
-                </th:block>
-
-
-                <a sec:authorize="hasRole('ADMIN')" class="nav-link" th:href="@{/users/warehouse}">Warehouse</a>
-
+<!--            sec:authorize="hasAnyRole('CLIENT', 'ADMIN', 'OFFICE_EMPLOYEE')-->
                 <th:block sec:authorize="!isAuthenticated()">
                     <a class="nav-link" th:href="@{/users/login}">Login</a>
                     <a class="nav-link" th:href="@{/users/register}">Register</a>
                 </th:block>
 
+                <th:block sec:authorize="hasAnyRole('ADMIN', 'OFFICE_EMPLOYEE', 'COURIER_EMPLOYEE')">
+                    <a class="nav-link" aria-current="page" th:href="@{/home}">Home</a>
+                </th:block>
 
-                <div class="nav-item dropdown" sec:authorize="isAuthenticated()">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownOne" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        Catalogs
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" th:href="@{/smartphones/catalog}">Smartphone Products</a></li>
-                        <li><a class="dropdown-item" th:href="@{/computers/catalog}">Computer Products</a></li>
-                    </ul>
-                </div>
+                <a sec:authorize="hasRole('CLIENT')" class="nav-link" th:href="@{/packages/my-packages}">My Packages</a>
+
+                <a sec:authorize="hasRole('CLIENT')" class="nav-link" th:href="@{/packages/add-package}">Add Package</a>
+
+                <a sec:authorize="hasRole('ADMIN')" class="nav-link" th:href="@{/admin}">Manage Data</a>
+
                 <div class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTwo" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Add Device
+                        Add Data
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" th:href="@{/smartphones/add-smartphone}">Add Smartphone</a></li>
-                        <li><a class="dropdown-item" th:href="@{/computers/add-computer}">Add Computer</a></li>
+                        <li><a class="dropdown-item" th:href="@{/companies/add-company}">Add Company</a></li>
+                        <li><a class="dropdown-item" th:href="@{/employees/add-employee}">Add Employee</a></li>
                     </ul>
                 </div>
-                <div class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownThree" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        Add Offer
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" th:href="@{/offers/add-computer-offer}">Add Computer Offer</a></li>
-                        <li><a class="dropdown-item" th:href="@{/offers/add-smartphone-offer}">Add Smartphone Offer</a>
-                        </li>
-                    </ul>
-                </div>
-
-                <a sec:authorize="hasRole('ADMIN')" class="nav-link" th:href="@{/statistics}">Statistics</a>
-
 
             </div>
         </div>
@@ -85,7 +63,7 @@
             <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTwof" role="button"
                    data-bs-toggle="dropdown" aria-expanded="false">
-                    [(#{userEntity})] <span sec:authorize="isAuthenticated()"
+                    Welcome,  <span sec:authorize="isAuthenticated()"
                                 sec:authentication="name">
                             Name of the logged in userEntity.
                           </span>

@@ -1,10 +1,9 @@
 package org.logisticcompany.service;
 
-import org.logisticcompany.model.Package;
 import org.logisticcompany.model.UserEntity;
-import org.logisticcompany.model.dto.PackageDto;
 import org.logisticcompany.model.dto.UserDto;
 import org.logisticcompany.model.service.UserServiceModel;
+import org.logisticcompany.model.view.UserBalanceViewModel;
 
 import java.util.List;
 
@@ -28,4 +27,6 @@ public interface UserService {
     void registerUser(UserServiceModel userServiceModel);
 
     void initializeUsers();
+
+    UserBalanceViewModel getLoggedUserInfo(String name);
 }

@@ -7,6 +7,7 @@ import org.logisticcompany.model.dto.PackageDto;
 import org.logisticcompany.model.enums.PackageType;
 import org.logisticcompany.model.enums.Role;
 import org.logisticcompany.model.enums.State;
+import org.logisticcompany.model.service.PackageServiceModel;
 import org.logisticcompany.repository.OfficeRepository;
 import org.logisticcompany.repository.PackageRepository;
 import org.logisticcompany.repository.UserRepository;
@@ -40,8 +41,8 @@ public class PackageServiceImpl implements PackageService {
     }
 
     @Override
-    public Package createPackage(PackageDto packageDto) {
-        Package pack = this.modelMapper.map(packageDto, Package.class);
+    public Package createPackage(PackageServiceModel packageServiceModel, String userName) {
+        Package pack = this.modelMapper.map(packageServiceModel, Package.class);
 
         this.packageRepository.save(pack);
         log.info("Package created");

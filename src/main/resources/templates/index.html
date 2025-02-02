@@ -25,7 +25,7 @@
         <div class="col-lg-8 align-self-baseline bg-blur">
 
             <th:block sec:authorize="!isAuthenticated()">
-                <p class="mb-5 h3" style="color: #ff8100!important;">You can login or register to have access to specific services in the shop</p>
+                <p class="mb-5 h3" style="color: #ff8100!important;">You can login or register to have access to services like sending and accepting packages</p>
                 <div>
                     <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/users/login}">Login</a>
                     <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/users/register}">Register</a>
@@ -33,16 +33,14 @@
             </th:block>
 
             <th:block sec:authorize="isAuthenticated()">
-                <p class="mb-5 h3" style="color: #ff8100!important;">You can view our available products by clicking one of the buttons below!</p>
+                <p class="mb-5 h3" style="color: #ff8100!important;">You can start sending your packages!</p>
                 <div>
-                    <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/smartphones/catalog}">Smartphones</a>
-                    <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/computers/catalog}">Computers</a>
+                    <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/packages/add-package}">Add Package</a>
+                    <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/packages/my-packages}">My Packages</a>
                 </div>
             </th:block>
 
-            <p class="h4 mt-5" style="color: #ff8100!important;">Welcome to our shop about smartphone and computer devices.</p>
-            <p sec:authorize="isAuthenticated()" class="h4" style="color: #ff8100!important;">You can add money on your profile page.</p>
-            <a sec:authorize="isAuthenticated()" class="btn-outline-warning font-weight-bold h4 text-decoration-underline" th:href="@{/users/profile}"></a>
+            <p class="h4 mt-5" style="color: #ff8100!important;">Welcome to our logistic application about sending, accepting and managing different packages.</p>
         </div>
     </div>
 </div>

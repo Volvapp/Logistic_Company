@@ -2,11 +2,12 @@ package org.logisticcompany.service;
 
 import org.logisticcompany.model.dto.PackageDto;
 import org.logisticcompany.model.Package;
+import org.logisticcompany.model.service.PackageServiceModel;
 
 import java.util.List;
 
 public interface PackageService {
-    Package createPackage(PackageDto packageDto);
+    Package createPackage(PackageServiceModel packageServiceModel, String userName);
 
     List<PackageDto> getPackages();
 
@@ -29,5 +30,4 @@ public interface PackageService {
     Double calculatePrice(Long packageId);
 
     void initializePackages();
-
 }

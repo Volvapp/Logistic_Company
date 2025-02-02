@@ -215,6 +215,20 @@ public class PackageServiceImpl implements PackageService {
     }
 
     @Override
+    public void acceptPackage(Long packageId, String employeeUsername) {
+        Package pack = this.packageRepository
+                .findById(packageId)
+                .orElseThrow(() -> new ObjectNotFoundException(String.format("Package with id %d not found", packageId)));
+        UserEntity employee = this.userRepository
+                .findByUsername(employeeUsername)
+                .orElseThrow(() -> new ObjectNotFoundException(String.format("Employee %s not found", employeeUsername)));
+
+        pack.setReceiver(employee);
+        pack.setType(PackageType.ACCEPTED);
+        this.packageRepository.save(pack);
+    }
+
+    @Override
     public void initializePackages() {
         // Initialize sample packages with predefined users and addresses
         UserEntity sender = this.userRepository.findById(2L).get();

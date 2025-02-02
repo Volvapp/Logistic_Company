@@ -30,6 +30,8 @@ public interface PackageService {
 
     Double calculatePrice(Package pack);
 
+    void acceptPackage(Long packageId, String employeeUsername);
+
     void initializePackages();
 
     List<ClientPackageDetailsView> findAllClientPackagesDetails(String username);

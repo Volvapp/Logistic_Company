@@ -181,13 +181,13 @@ public class PackageServiceImpl implements PackageService {
         UserEntity sender = this.userRepository.findById(2L).get(); // Assuming sender object is initialized
         UserEntity receiver = this.userRepository.findById(4L).get(); // Assuming receiver object is initialized
 
-        Package package1 = new Package(sender, receiver, "123 Main St", 5.0, 100.0, State.DELIVERED, PackageType.SENT);
+        Package package1 = new Package(sender, receiver, "123 Main St", 5.0, 100.0, PackageType.SENT);
         this.packageRepository.save(package1);
-        Package package2 = new Package(sender, receiver, "456 Oak Rd", 10.0, 150.0, State.NOT_DELIVERED, PackageType.SENT);
+        Package package2 = new Package(sender, receiver, "456 Oak Rd", 10.0, 150.0,  PackageType.SENT);
         this.packageRepository.save(package2);
-        Package package3 = new Package(sender, receiver, "789 Pine Ave", 2.0, 50.0, State.DELIVERED, PackageType.ACCEPTED);
+        Package package3 = new Package(sender, receiver, "789 Pine Ave", 2.0, 50.0, PackageType.ACCEPTED);
         this.packageRepository.save(package3);
-        Package package4 = new Package(sender, receiver, "101 Maple Blvd", 8.0, 200.0, State.NOT_DELIVERED, PackageType.ACCEPTED);
+        Package package4 = new Package(sender, receiver, "101 Maple Blvd", 8.0, 200.0,  PackageType.ACCEPTED);
         this.packageRepository.save(package4);
 
         System.out.println(this.getAllRegisteredPackages());

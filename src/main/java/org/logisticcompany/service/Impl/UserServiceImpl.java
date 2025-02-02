@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void pay(String username, Long packageId) {
+    public boolean pay(String username, Long packageId) {
         UserEntity user = this.userRepository
                 .findByUsername(username)
                 .orElseThrow(() -> new ObjectNotFoundException("User with username " + username + " not found!"));
@@ -129,12 +129,14 @@ public class UserServiceImpl implements UserService {
 
             if (user.getBalance() >= pack.getPrice()) {
                 user.setBalance(user.getBalance() - pack.getPrice());
-                pack.setState(State.DELIVERED);
 
                 this.userRepository.save(user);
                 this.packageRepository.save(pack);
+                return true;
+            } else {
+                return false;
             }
-        }else {
+        } else {
             throw new ObjectNotFoundException(String.format("Package with id %d already delivered", packageId));
         }
     }

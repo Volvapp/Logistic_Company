@@ -30,7 +30,7 @@ public class Package extends BaseEntity {
     @Column(name = "type", nullable = false)
     private PackageType type;
 
-    public Package(UserEntity sender, UserEntity receiver, String address, Double weight, Double price, State state, PackageType type) {
+    public Package(UserEntity sender, UserEntity receiver, String address, Double weight, Double price, PackageType type) {
         this.sender = sender;
         this.receiver = receiver;
         this.address = address;
@@ -38,7 +38,7 @@ public class Package extends BaseEntity {
         this.price = price;
         this.registrationDate = LocalDate.now();
         this.arrivalDate = LocalDate.now().plusDays(5);
-        this.state = state;
+        this.state = State.NOT_DELIVERED;
         this.type = type;
     }
 

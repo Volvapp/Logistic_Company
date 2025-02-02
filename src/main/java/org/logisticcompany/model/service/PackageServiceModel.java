@@ -9,14 +9,10 @@ public class PackageServiceModel {
     private String address;
     private Double weight;
     private Double price;
-    private PackageType type;
-
-    public PackageServiceModel(String address, Double weight, Double price,
-                               PackageType type) {
+    public PackageServiceModel(String address, Double weight, Double price) {
         this.address = address;
         this.weight = weight;
         this.price = price;
-        this.type = type;
     }
 
     public PackageServiceModel() {
@@ -44,14 +40,6 @@ public class PackageServiceModel {
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public PackageType getType() {
-        return type;
-    }
-
-    public void setType(PackageType type) {
-        this.type = type;
     }
 
     public Long getId() {

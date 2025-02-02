@@ -10,6 +10,7 @@ import org.logisticcompany.model.enums.Role;
 import org.logisticcompany.model.enums.State;
 import org.logisticcompany.model.service.PackageServiceModel;
 import org.logisticcompany.model.view.ClientPackageDetailsView;
+import org.logisticcompany.repository.LogisticCompanyRepository;
 import org.logisticcompany.repository.OfficeRepository;
 import org.logisticcompany.repository.PackageRepository;
 import org.logisticcompany.repository.UserRepository;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,19 +39,33 @@ public class PackageServiceImpl implements PackageService {
     private final OfficeRepository officeRepository;
     private final ModelMapper modelMapper;
 
-    public PackageServiceImpl(PackageRepository packageRepository, UserRepository userRepository, OfficeRepository officeRepository, ModelMapper modelMapper) {
+    private final LogisticCompanyRepository logisticCompanyRepository;
+
+    public PackageServiceImpl(PackageRepository packageRepository, UserRepository userRepository, OfficeRepository officeRepository, ModelMapper modelMapper, LogisticCompanyRepository logisticCompanyRepository) {
         this.packageRepository = packageRepository;
         this.userRepository = userRepository;
         this.officeRepository = officeRepository;
         this.modelMapper = modelMapper;
+        this.logisticCompanyRepository = logisticCompanyRepository;
     }
 
     @Override
     public Package createPackage(PackageServiceModel packageServiceModel, String userName) {
+
+        String address = packageServiceModel.getAddress();
+
+        Optional<Office> byAddress = officeRepository.findByAddress(address);
+
         // Find the sender user by username, throw an exception if not found
         UserEntity sender = this.userRepository
                 .findByUsername(userName)
                 .orElseThrow(() -> new ObjectNotFoundException(String.format("User with name %s not found", userName)));
+
+        if(byAddress.isPresent()) {
+            sender.setLogisticCompany(byAddress.get().getLogisticCompany());
+        } else {
+            sender.setLogisticCompany(logisticCompanyRepository.findById(1L).get());
+        }
 
         // Map package service model to Package entity
         Package pack = this.modelMapper.map(packageServiceModel, Package.class);
@@ -63,10 +79,13 @@ public class PackageServiceImpl implements PackageService {
         pack.setRegistrationDate(LocalDate.now());
         pack.setArrivalDate(pack.getRegistrationDate().plusDays(5));
         pack.setState(State.NOT_DELIVERED);
+        pack.setType(PackageType.SENT);
         pack.setPackagePaidStatus(PackagePaidStatus.NON_PAID);
 
         // Save package to repository
         this.packageRepository.save(pack);
+
+        userRepository.save(sender);
         log.info("Package created");
 
         return pack;

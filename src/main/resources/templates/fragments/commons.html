@@ -36,15 +36,23 @@
                     <a class="nav-link" th:href="@{/users/register}">Register</a>
                 </th:block>
 
-                <th:block sec:authorize="hasAnyRole('ADMIN', 'OFFICE_EMPLOYEE', 'COURIER_EMPLOYEE')">
-                    <a class="nav-link" aria-current="page" th:href="@{/home}">Home</a>
+                <th:block sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" aria-current="page" th:href="@{/admin/packages}">Packages</a>
+                </th:block>
+
+                <th:block sec:authorize="hasRole('OFFICE_EMPLOYEE')">
+                    <a class="nav-link" aria-current="page" th:href="@{/office-employee/packages}">Packages</a>
+                </th:block>
+
+                <th:block sec:authorize="hasRole('COURIER_EMPLOYEE')">
+                    <a class="nav-link" aria-current="page" th:href="@{/courier-employee/packages}">Packages</a>
                 </th:block>
 
                 <a sec:authorize="hasRole('CLIENT')" class="nav-link" th:href="@{/packages/my-packages}">My Packages</a>
 
                 <a sec:authorize="hasRole('CLIENT')" class="nav-link" th:href="@{/packages/add-package}">Add Package</a>
 
-                <a sec:authorize="hasRole('ADMIN')" class="nav-link" th:href="@{/admin}">Manage Data</a>
+                <a sec:authorize="hasRole('ADMIN')" class="nav-link" th:href="@{/admin/reports}">Data Reports</a>
 
                 <div class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTwo" role="button"
@@ -54,6 +62,7 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" th:href="@{/companies/add-company}">Add Company</a></li>
                         <li><a class="dropdown-item" th:href="@{/employees/add-employee}">Add Employee</a></li>
+                        <li><a class="dropdown-item" th:href="@{/employees/add-office}">Add Office</a></li>
                     </ul>
                 </div>
 

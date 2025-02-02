@@ -43,7 +43,7 @@ public class PackageServiceTests {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        packageService = new PackageServiceImpl(packageRepository, userRepository, officeRepository, modelMapper);
+        packageService = new PackageServiceImpl(packageRepository, userRepository, officeRepository, modelMapper, null);
     }
 
 

@@ -5,6 +5,7 @@ import org.logisticcompany.model.Office;
 import org.logisticcompany.model.Package;
 import org.logisticcompany.model.UserEntity;
 import org.logisticcompany.model.dto.OfficeDto;
+import org.logisticcompany.model.view.OfficeAddressesViewModel;
 import org.logisticcompany.repository.LogisticCompanyRepository;
 import org.logisticcompany.repository.OfficeRepository;
 import org.logisticcompany.repository.PackageRepository;
@@ -114,5 +115,22 @@ public class OfficeServiceImpl implements OfficeService {
         logisticCompany.getOffices().add(office);
 
         logisticCompanyRepository.save(logisticCompany);
+    }
+
+    @Override
+    public List<OfficeAddressesViewModel> findAddresses(String username) {
+        List<OfficeAddressesViewModel> officeAddressesViewModels = new ArrayList<>();
+
+        List<Office> officeRepositoryAll = officeRepository.findAll();
+
+        for (Office office : officeRepositoryAll) {
+            OfficeAddressesViewModel officeAddressesViewModel = new OfficeAddressesViewModel();
+
+            officeAddressesViewModel.setAddress(office.getAddress());
+
+            officeAddressesViewModels.add(officeAddressesViewModel);
+        }
+
+        return officeAddressesViewModels;
     }
 }

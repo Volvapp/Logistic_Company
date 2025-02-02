@@ -2,6 +2,7 @@ package org.logisticcompany.web;
 
 import org.logisticcompany.model.binding.PackageAddBindingModel;
 import org.logisticcompany.model.service.PackageServiceModel;
+import org.logisticcompany.service.OfficeService;
 import org.logisticcompany.service.PackageService;
 import org.logisticcompany.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -22,11 +23,13 @@ public class PackageController {
 
     private final UserService userService;
     private final ModelMapper modelMapper;
+    private final OfficeService officeService;
 
-    public PackageController(PackageService packageService, UserService userService, ModelMapper modelMapper) {
+    public PackageController(PackageService packageService, UserService userService, ModelMapper modelMapper, OfficeService officeService) {
         this.packageService = packageService;
         this.userService = userService;
         this.modelMapper = modelMapper;
+        this.officeService = officeService;
     }
 
     @GetMapping("/my-packages")
@@ -56,7 +59,10 @@ public class PackageController {
     }
 
     @GetMapping("/add-package")
-    public String add() {
+    public String add(Model model, Principal principal) {
+
+        model.addAttribute("officeAddresses", officeService.findAddresses(principal.getName()));
+
         return "add-package";
     }
 

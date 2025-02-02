@@ -32,11 +32,35 @@
                 </div>
             </th:block>
 
-            <th:block sec:authorize="isAuthenticated()">
+            <th:block sec:authorize="hasRole('ADMIN')">
+                <p class="mb-5 h3" style="color: #ff8100!important;">You can start creating your data!</p>
+                <div>
+                    <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/companies/add-company}">Add Company</a>
+                    <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/employees/add-employee}">Add Employee</a>
+                </div>
+            </th:block>
+
+            <th:block sec:authorize="hasRole('CLIENT')">
                 <p class="mb-5 h3" style="color: #ff8100!important;">You can start sending your packages!</p>
                 <div>
                     <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/packages/add-package}">Add Package</a>
                     <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/packages/my-packages}">My Packages</a>
+                </div>
+            </th:block>
+
+            <th:block sec:authorize="hasRole('OFFICE_EMPLOYEE')">
+                <p class="mb-5 h3" style="color: #ff8100!important;">You can start accepting the packages!</p>
+                <div>
+                    <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/office-employee/packages}">Packages</a>
+                    <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/users/profile}">My Profile</a>
+                </div>
+            </th:block>
+
+            <th:block sec:authorize="hasRole('COURIER_EMPLOYEE')">
+                <p class="mb-5 h3" style="color: #ff8100!important;">You can start delivering packages!</p>
+                <div>
+                    <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/courier-employee/packages}">Packages</a>
+                    <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/users/profile}">My Profile</a>
                 </div>
             </th:block>
 

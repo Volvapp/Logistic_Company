@@ -10,16 +10,13 @@ public class PackageAddBindingModel {
     private String address;
     private Double weight;
     private Double price;
-    private PackageType type;
-
     public PackageAddBindingModel() {
     }
 
-    public PackageAddBindingModel(String address, Double weight, Double price, PackageType type) {
+    public PackageAddBindingModel(String address, Double weight, Double price) {
         this.address = address;
         this.weight = weight;
         this.price = price;
-        this.type = type;
     }
 
 
@@ -51,14 +48,5 @@ public class PackageAddBindingModel {
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    @NotNull
-    public PackageType getType() {
-        return type;
-    }
-
-    public void setType(PackageType type) {
-        this.type = type;
     }
 }

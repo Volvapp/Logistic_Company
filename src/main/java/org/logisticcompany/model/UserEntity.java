@@ -30,6 +30,9 @@ public class UserEntity extends BaseEntity {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<RoleEntity> roles;
 
+    @ManyToOne
+    private LogisticCompany logisticCompany;
+
     public UserEntity(String username, String firstName, String lastName, String password, String email,
                       Double balance, Integer age, LocalDate bornOn, String country) {
         this.username = username;
@@ -42,10 +45,10 @@ public class UserEntity extends BaseEntity {
         this.bornOn = bornOn;
         this.country = country;
         this.roles = new HashSet<>();
+        this.logisticCompany = null;
     }
 
     public UserEntity() {
-
     }
 
     public Set<RoleEntity> getRoles() {
@@ -126,6 +129,14 @@ public class UserEntity extends BaseEntity {
 
     public void setRoles(Set<RoleEntity> roles) {
         this.roles = roles;
+    }
+
+    public LogisticCompany getLogisticCompany() {
+        return logisticCompany;
+    }
+
+    public void setLogisticCompany(LogisticCompany logisticCompany) {
+        this.logisticCompany = logisticCompany;
     }
 
     @Override

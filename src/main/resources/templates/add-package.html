@@ -6,50 +6,75 @@
 <nav th:replace="/fragments/commons :: navigation"></nav>
 
 <div class="p-5 text-center">
-  <h1 class="text-light bg-blur border-bottom border-top border-left border-right">Add Package</h1>
-  <div class="d-flex justify-content-center">
-    <form th:action="@{/packages/add-package}" th:method="post" th:object="${packageAddBindingModel}"
-          class="text-light">
+    <h1 class="text-light bg-blur border-bottom border-top border-left border-right">Add Package</h1>
+    <div class="d-flex justify-content-center">
+        <form th:action="@{/packages/add-package}" th:method="post" th:object="${packageAddBindingModel}"
+              class="text-light">
 
-      <div class="form-row m-5">
-        <div class="col">
-          <label for="address">Address</label>
-          <input th:field="*{address}" th:errorclass="bg-danger" name="address" id="address" type="text" class="form-control" placeholder="Address">
-          <small th:if="${#fields.hasErrors('address')}" id="addressError" class="form-text bg-danger text-light rounded">Address must be between 3 and 20
-            characters</small>
-        </div>
-      </div>
-      <div class="form-row m-5">
-        <div class="col">
-          <label for="weight">Weight</label>
-          <input th:field="*{weight}" th:errorclass="bg-danger" name="weight" id="weight" type="number" class="form-control" placeholder="Weight">
-          <small th:if="${#fields.hasErrors('weight')}" id="weightError" class="form-text bg-danger text-light rounded">Weight must be positive number</small>
-        </div>
-        <div class="col">
-          <label for="price">Price</label>
-          <input th:field="*{price}" th:errorclass="bg-danger" name="price" id="price" type="text" class="form-control" placeholder="Price">
-          <small th:if="${#fields.hasErrors('price')}" id="priceError" class="form-text bg-danger text-light rounded">Price must be a positive number</small>
-        </div>
-      </div>
-      <div class="form-row m-5">
-        <div class="col">
-          <label for="type">Package Type</label>
-          <select th:field="*{type}" th:errorclass="bg-danger" name="type" id="type" class="custom-select">
-            <option value="" selected>Select Package Type</option>
-            <option th:each="c : ${T(org.logisticcompany.model.enums.PackageType).values()}" th:value="${c}" th:text="${c}" selected>Select Package Type</option>
-          </select>
-          <small th:if="${#fields.hasErrors('type')}" id="typeError" class="form-text text-light  bg-danger rounded">You must select package type</small>
-        </div>
-      </div>
-      <div class="d-flex justify-content-center mt-4">
-        <button class="btn btn-success btn-block w-50" type="submit">Add Package</button>
-      </div>
-    </form>
-  </div>
+            <div class="form-row m-5">
+                <div class="col">
+                    <label for="addressType">Package Address Type</label>
+                    <select name="addressType" id="addressType" class="custom-select">
+                        <option value="" selected>Select Package Type</option>
+                        <option value="Home Address">Home Address</option>
+                        <option th:each="o : ${officeAddresses}" th:value="${o.address}"
+                                th:text="${o.address}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row m-5">
+                <div class="col">
+                    <label for="address">Address</label>
+                    <input th:field="*{address}" th:errorclass="bg-danger" name="address" id="address" type="text"
+                           class="form-control" placeholder="Address" disabled>
+                    <!-- Hidden input field to store the office address value -->
+                    <input type="hidden" id="hiddenAddress" th:field="*{address}" />
+                    <small th:if="${#fields.hasErrors('address')}" id="addressError"
+                           class="form-text bg-danger text-light rounded">Address must be between 3 and 20
+                        characters</small>
+                </div>
+            </div>
+            <div class="form-row m-5">
+                <div class="col">
+                    <label for="weight">Weight</label>
+                    <input th:field="*{weight}" th:errorclass="bg-danger" name="weight" id="weight" type="number"
+                           class="form-control" placeholder="Weight">
+                    <small th:if="${#fields.hasErrors('weight')}" id="weightError"
+                           class="form-text bg-danger text-light rounded">Weight must be positive number</small>
+                </div>
+                <div class="col">
+                    <label for="price">Price</label>
+                    <input th:field="*{price}" th:errorclass="bg-danger" name="price" id="price" type="text"
+                           class="form-control" placeholder="Price">
+                    <small th:if="${#fields.hasErrors('price')}" id="priceError"
+                           class="form-text bg-danger text-light rounded">Price must be a positive number</small>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center mt-4">
+                <button class="btn btn-success btn-block w-50" type="submit">Add Package</button>
+            </div>
+        </form>
+    </div>
 </div>
 
+<footer th:replace="/fragments/commons :: footer"></footer>
 
-<footer th:replace="/fragments/footer-fixed-bottom :: footer-fixed-bottom"></footer>
+<script>
+    document.getElementById('addressType').addEventListener('change', function () {
+        var addressInput = document.getElementById('address');
+        var hiddenAddressInput = document.getElementById('hiddenAddress');
+
+        if (this.value === 'Home Address') {
+            addressInput.disabled = false;
+            addressInput.value = '';
+            hiddenAddressInput.value = '';
+        } else {
+            addressInput.disabled = true;
+            addressInput.value = this.value;
+            hiddenAddressInput.value = this.value;
+        }
+    });
+</script>
 
 </body>
 </html>

@@ -96,7 +96,7 @@ public class LogisticCompanyServiceImpl implements LogisticCompanyService {
     }
 
     @Override
-    public Double getRevenueForTimePeriod(Long companyId, LocalDate start, LocalDate end) {
+    public String getRevenueForTimePeriod(Long companyId, LocalDate start, LocalDate end) {
         // Find company by ID and calculate revenue for the given period
         return this.logisticCompanyRepository.findById(companyId)
                 .map(logisticCompany -> logisticCompany.getOffices().stream()
@@ -107,7 +107,7 @@ public class LogisticCompanyServiceImpl implements LogisticCompanyService {
                         // Sum the package prices to get total revenue
                         .mapToDouble(Package::getPrice)
                         .sum())
-                .orElse(null);
+                .orElse(null).toString();
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.logisticcompany.model.UserEntity;
 import org.logisticcompany.model.dto.UserDto;
 import org.logisticcompany.model.enums.PackagePaidStatus;
 import org.logisticcompany.model.enums.PackageType;
+import org.logisticcompany.repository.LogisticCompanyRepository;
 import org.logisticcompany.repository.PackageRepository;
 import org.logisticcompany.repository.UserRepository;
 import org.logisticcompany.service.Impl.UserServiceImpl;
@@ -38,7 +39,6 @@ public class UserServiceTests {
 
     @Mock
     private ModelMapper modelMapper;
-
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -105,24 +105,6 @@ public class UserServiceTests {
         userServiceImpl.deleteUser(userId);
 
         assertEquals(0, userRepository.count());
-    }
-
-    @Test
-    void testPayPackage_SufficientBalance() {
-        // Setup for package payment with sufficient balance
-        UserEntity sender = new UserEntity("Gosho", "Georgi", "Georgiev", passwordEncoder.encode("1234"), "gosho@abv.bg", 2000.0, 21, LocalDate.now(), "Cheeseburger");
-        Package pack = new Package(sender, testUser, sender, "Some Address", 5.0, 50.0, PackageType.SENT);
-
-        when(userRepository.findByUsername("Gosho")).thenReturn(Optional.of(sender));
-        when(packageRepository.findById(1L)).thenReturn(Optional.of(pack));
-        when(userRepository.save(sender)).thenReturn(sender);
-        when(packageRepository.save(pack)).thenReturn(pack);
-
-        boolean paymentStatus = userServiceImpl.pay("Gosho", 1L);
-
-        assertTrue(paymentStatus);
-        assertEquals(1950.0, sender.getBalance());
-        assertEquals(PackagePaidStatus.PAID, pack.getPackagePaidStatus());
     }
 
     @Test

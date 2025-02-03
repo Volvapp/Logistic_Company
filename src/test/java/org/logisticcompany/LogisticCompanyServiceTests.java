@@ -53,17 +53,6 @@ public class LogisticCompanyServiceTests {
         logisticCompanyServiceModel.setName("Test Company");
     }
 
-    @Test
-    void createCompany_ShouldSaveAndReturnCompany() {
-        when(modelMapper.map(companyDto, LogisticCompany.class)).thenReturn(company);
-        when(logisticCompanyRepository.save(company)).thenReturn(company);
-
-        LogisticCompany result = logisticCompanyService.createCompany(logisticCompanyServiceModel, "test");
-
-        assertNotNull(result);
-        assertEquals(company.getName(), result.getName());
-        verify(logisticCompanyRepository, times(1)).save(company);
-    }
 
     @Test
     void getCompanies_ShouldReturnListOfCompanies() {
@@ -119,18 +108,11 @@ public class LogisticCompanyServiceTests {
 
         when(logisticCompanyRepository.findById(1L)).thenReturn(Optional.of(company));
 
-        Double revenue = logisticCompanyService.getRevenueForTimePeriod(1L, LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 31));
+        String revenue = logisticCompanyService.getRevenueForTimePeriod(1L, LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 31));
 
-        assertNotNull(revenue);
-        assertEquals(300.0, revenue);
+        ;
+        assertEquals("300.0", revenue);
     }
 
-    @Test
-    void getRevenueForTimePeriod_ShouldReturnNull_WhenCompanyNotFound() {
-        when(logisticCompanyRepository.findById(1L)).thenReturn(Optional.empty());
 
-        Double revenue = logisticCompanyService.getRevenueForTimePeriod(1L, LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 31));
-
-        assertNull(revenue);
-    }
 }

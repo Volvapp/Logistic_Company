@@ -1,11 +1,60 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/fragments/commons :: head"></head>
+<head th:replace="/fragments/commons :: head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
 <body>
 
 <nav th:replace="/fragments/commons :: navigation"></nav>
 
+<div class="container mt-4">
+    <h2 class="mb-4 text-white text-center">Reports</h2>
+    <div class="row g-3">
+        <button class="btn btn-warning" onclick="fetchReport('/reports/all-employees', 'All Employees')">All Employees</button>
+        <button class="btn btn-warning" onclick="fetchReport('/reports/all-clients', 'All Clients')">All Clients</button>
+        <button class="btn btn-warning" onclick="fetchReport('/reports/all-packages', 'All Packages')">All Packages</button>
+        <button class="btn btn-warning" onclick="fetchReport('/reports/not-delivered-packages', 'Not Delivered Packages')">Not Delivered Packages</button>
+        <button class="btn btn-warning" onclick="fetchReport('/reports/sent-not-delivered', 'Sent Not Delivered Packages')">Sent Not Delivered</button>
+        <button class="btn btn-warning" onclick="fetchReport('/reports/packages-by-client', 'Packages by Client')">Packages by Client</button>
+        <button class="btn btn-warning" onclick="fetchReport('/reports/revenue', 'Revenue')">Revenue</button>
+    </div>
+</div>
 
+<!-- Modal -->
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reportModalLabel">Report</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="reportContent">
+                Loading...
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function fetchReport(url, title) {
+        document.getElementById('reportModalLabel').innerText = title;
+        document.getElementById('reportContent').innerText = 'Loading...';
+        fetch(url)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('reportContent').innerText = data;
+                new bootstrap.Modal(document.getElementById('reportModal')).show();
+            })
+            .catch(error => {
+                document.getElementById('reportContent').innerText = 'Error fetching data.';
+            });
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <footer th:replace="/fragments/footer-fixed-bottom :: footer-fixed-bottom"></footer>
 

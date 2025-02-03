@@ -17,7 +17,7 @@ public interface LogisticCompanyService {
 
     void deleteCompany(Long id);
 
-    Double getRevenueForTimePeriod(Long companyId, LocalDate start, LocalDate end);
+    String getRevenueForTimePeriod(Long companyId, LocalDate start, LocalDate end);
 
     void initializeLogisticCompanies();
 }

@@ -2,6 +2,7 @@ package org.logisticcompany.service;
 
 import org.logisticcompany.model.UserEntity;
 import org.logisticcompany.model.dto.UserDto;
+import org.logisticcompany.model.service.EmployeeServiceModel;
 import org.logisticcompany.model.service.UserServiceModel;
 import org.logisticcompany.model.view.UserBalanceViewModel;
 import org.logisticcompany.model.view.UserViewModel;
@@ -34,4 +35,6 @@ public interface UserService {
     UserViewModel getUserInfo(String name);
 
     void addMoneyToUser(String name);
+
+    void createEmployee(EmployeeServiceModel employeeServiceModel, String username);
 }

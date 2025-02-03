@@ -5,6 +5,7 @@ import org.logisticcompany.model.Package;
 import org.logisticcompany.model.UserEntity;
 import org.logisticcompany.model.dto.LogisticCompanyDto;
 import org.logisticcompany.model.service.LogisticCompanyServiceModel;
+import org.logisticcompany.model.view.LogisticCompanyViewModel;
 import org.logisticcompany.repository.LogisticCompanyRepository;
 import org.logisticcompany.repository.OfficeRepository;
 import org.logisticcompany.repository.UserRepository;
@@ -120,5 +121,19 @@ public class LogisticCompanyServiceImpl implements LogisticCompanyService {
         logisticCompany.setUserEntities(List.of(userEntityOfficeEmployee, userEntityCourierEmployee));
 
         logisticCompanyRepository.save(logisticCompany);
+    }
+
+    @Override
+    public List<LogisticCompanyViewModel> findAllCompanies() {
+        List<LogisticCompany> logisticCompanyRepositoryAll = logisticCompanyRepository.findAll();
+        List<LogisticCompanyViewModel> logisticCompanyViewModels = new ArrayList<>();
+
+        for (LogisticCompany logisticCompany : logisticCompanyRepositoryAll) {
+            LogisticCompanyViewModel logisticCompanyViewModel = new LogisticCompanyViewModel();
+
+            logisticCompanyViewModel.setName(logisticCompany.getName());
+            logisticCompanyViewModels.add(logisticCompanyViewModel);
+        }
+        return logisticCompanyViewModels;
     }
 }

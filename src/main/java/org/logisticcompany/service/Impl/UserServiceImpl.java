@@ -1,5 +1,6 @@
 package org.logisticcompany.service.Impl;
 
+import org.logisticcompany.model.LogisticCompany;
 import org.logisticcompany.model.Package;
 import org.logisticcompany.model.RoleEntity;
 import org.logisticcompany.model.UserEntity;
@@ -7,8 +8,10 @@ import org.logisticcompany.model.dto.UserDto;
 import org.logisticcompany.model.enums.PackagePaidStatus;
 import org.logisticcompany.model.enums.Role;
 import org.logisticcompany.model.enums.State;
+import org.logisticcompany.model.service.EmployeeServiceModel;
 import org.logisticcompany.model.service.UserServiceModel;
 import org.logisticcompany.model.view.UserViewModel;
+import org.logisticcompany.repository.LogisticCompanyRepository;
 import org.logisticcompany.repository.PackageRepository;
 import org.logisticcompany.model.view.UserBalanceViewModel;
 import org.logisticcompany.repository.RoleRepository;
@@ -47,14 +50,17 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final LogisticCompanyRepository logisticCompanyRepository;
+
     public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PackageRepository packageRepository,
-                           ModelMapper modelMapper, LogisticCompanyUserServiceImpl logisticCompanyUserService, PasswordEncoder passwordEncoder) {
+                           ModelMapper modelMapper, LogisticCompanyUserServiceImpl logisticCompanyUserService, PasswordEncoder passwordEncoder, LogisticCompanyRepository logisticCompanyRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.packageRepository = packageRepository;
         this.modelMapper = modelMapper;
         this.logisticCompanyUserService = logisticCompanyUserService;
         this.passwordEncoder = passwordEncoder;
+        this.logisticCompanyRepository = logisticCompanyRepository;
     }
 
     @Override
@@ -274,5 +280,24 @@ public class UserServiceImpl implements UserService {
 
         // Save updated balance
         userRepository.save(user);
+    }
+
+    @Override
+    public void createEmployee(EmployeeServiceModel employeeServiceModel, String username) {
+        UserEntity userEntity = modelMapper.map(employeeServiceModel, UserEntity.class);
+
+        LogisticCompany logisticCompanyRepositoryByName = logisticCompanyRepository.findByName(employeeServiceModel.getCompany());
+
+        RoleEntity role = roleRepository.findByRole(Role.valueOf(employeeServiceModel.getEmployeeType()));
+
+        userEntity.setBalance(0.0);
+        userEntity.setRoles(Set.of(role));
+        userEntity.setLogisticCompany(logisticCompanyRepositoryByName);
+        userEntity.setPassword(passwordEncoder.encode(employeeServiceModel.getPassword()));
+
+        userRepository.save(userEntity);
+
+        logisticCompanyRepositoryByName.getUserEntities().add(userEntity);
+        logisticCompanyRepository.save(logisticCompanyRepositoryByName);
     }
 }

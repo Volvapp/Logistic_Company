@@ -4,6 +4,7 @@ import org.logisticcompany.model.LogisticCompany;
 import org.logisticcompany.model.dto.LogisticCompanyDto;
 import org.logisticcompany.model.service.LogisticCompanyServiceModel;
 import org.logisticcompany.model.service.PackageServiceModel;
+import org.logisticcompany.model.view.LogisticCompanyViewModel;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,4 +21,6 @@ public interface LogisticCompanyService {
     String getRevenueForTimePeriod(Long companyId, LocalDate start, LocalDate end);
 
     void initializeLogisticCompanies();
+
+    List<LogisticCompanyViewModel> findAllCompanies();
 }

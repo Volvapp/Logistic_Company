@@ -13,14 +13,50 @@
 <div class="container mt-4">
     <h2 class="mb-4 text-white text-center">Admin Reports</h2>
     <div class="row g-3">
-        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/all-employees', 'All Employees')">All Employees</button>
-        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/all-clients', 'All Clients')">All Clients</button>
-        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/all-packages', 'All Packages')">All Packages</button>
-        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/not-delivered-packages', 'Not Delivered Packages')">Not Delivered Packages</button>
-        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/sent-not-delivered', 'Sent Not Delivered Packages')">Sent Not Delivered</button>
-        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/packages-by-client', 'Packages by Client')">Packages by Client</button>
-        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/packages-by-receiver', 'Packages by Receiver')">Packages by Receiver</button>
-        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/revenue', 'Revenue Report')">Revenue Report</button>
+        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/all-employees', 'All Employees')">All
+            Employees
+        </button>
+        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/all-clients', 'All Clients')">All Clients
+        </button>
+        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/all-packages', 'All Packages')">All
+            Packages
+        </button>
+        <button class="btn btn-warning"
+                onclick="fetchReport('/admin/reports/not-delivered-packages', 'Not Delivered Packages')">Not Delivered
+            Packages
+        </button>
+        <button class="btn btn-warning"
+                onclick="fetchReport('/admin/reports/sent-not-delivered', 'Sent Not Delivered Packages')">Sent Not
+            Delivered
+        </button>
+
+        <!-- Packages by Client with Input Field -->
+        <div class="input-group">
+            <input type="text" class="form-control" id="clientId" placeholder="Enter Client ID">
+            <button class="btn btn-warning"
+                    onclick="fetchReportWithClientId('/admin/reports/packages-by-client', 'Packages by Client', 'clientId')">
+                Packages by Client
+            </button>
+        </div>
+
+        <!-- Packages by Receiver with Input Field -->
+        <div class="input-group">
+            <input type="text" class="form-control" id="receiverId" placeholder="Enter Receiver ID">
+            <button class="btn btn-warning"
+                    onclick="fetchReportWithClientId('/admin/reports/packages-by-receiver', 'Packages by Receiver', 'receiverId')">
+                Packages by Receiver
+            </button>
+        </div>
+
+        <!-- Revenue Report with Client ID, Start Date, and End Date -->
+        <div class="input-group">
+            <input type="text" class="form-control" id="revenueClientId" placeholder="Enter Client ID">
+            <input type="date" class="form-control" id="startDate" placeholder="Start Date">
+            <input type="date" class="form-control" id="endDate" placeholder="End Date">
+            <button class="btn btn-warning" onclick="fetchRevenueReport('/admin/reports/revenue', 'Revenue Report')">
+                Revenue Report
+            </button>
+        </div>
     </div>
 </div>
 
@@ -65,6 +101,30 @@
                 console.error('Error fetching report:', error);
                 document.getElementById('reportContent').innerText = 'Error fetching data.';
             });
+    }
+
+    function fetchReportWithClientId(url, title, inputId) {
+        const clientId = document.getElementById(inputId).value;
+        if (!clientId) {
+            alert('Please enter a Client ID');
+            return;
+        }
+        const fullUrl = `${url}?clientId=${clientId}`;
+        fetchReport(fullUrl, title);
+    }
+
+    function fetchRevenueReport(url, title) {
+        const clientId = document.getElementById('revenueClientId').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+
+        if (!clientId || !startDate || !endDate) {
+            alert('Please enter Client ID, Start Date, and End Date');
+            return;
+        }
+
+        const fullUrl = `${url}?clientId=${clientId}&startDate=${startDate}&endDate=${endDate}`;
+        fetchReport(fullUrl, title);
     }
 </script>
 

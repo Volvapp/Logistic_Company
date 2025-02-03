@@ -7,6 +7,7 @@ import org.logisticcompany.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
@@ -28,42 +29,42 @@ public class ReportsRestController {
     }
 
     @GetMapping("/admin/reports/all-employees")
-    public ResponseEntity<ReportViewModel> getAllEmployees(){
+    public ResponseEntity<ReportViewModel> getAllEmployees() {
         return ResponseEntity.ok(new ReportViewModel(userService.getAllEmployees()));
     }
 
     @GetMapping("/admin/reports/all-clients")
-    public ResponseEntity<ReportViewModel> getAllClients(){
+    public ResponseEntity<ReportViewModel> getAllClients() {
         return ResponseEntity.ok(new ReportViewModel(userService.getAllClients()));
     }
 
     @GetMapping("/admin/reports/all-packages")
-    public ResponseEntity<ReportViewModel> getAllPackages(){
+    public ResponseEntity<ReportViewModel> getAllPackages() {
         return ResponseEntity.ok(new ReportViewModel(packageService.getAllRegisteredPackages()));
     }
 
     @GetMapping("/admin/reports/not-delivered-packages")
-    public ResponseEntity<ReportViewModel> getNotDeliveredPackages(){
+    public ResponseEntity<ReportViewModel> getNotDeliveredPackages() {
         return ResponseEntity.ok(new ReportViewModel(packageService.getAllRegisteredNotDeliveredPackages()));
     }
 
     @GetMapping("/admin/reports/sent-not-delivered")
-    public ResponseEntity<ReportViewModel> getSentNotDelivered(){
+    public ResponseEntity<ReportViewModel> getSentNotDelivered() {
         return ResponseEntity.ok(new ReportViewModel(packageService.getAllSentNotDeliveredPackages()));
     }
 
     @GetMapping("/admin/reports/packages-by-client")
-    public ResponseEntity<ReportViewModel> getPackagesByClient(){
-        return ResponseEntity.ok(new ReportViewModel(packageService.getAllPackagesSentByClient(1L)));
+    public ResponseEntity<ReportViewModel> getPackagesByClient(@RequestParam Long clientId) {
+        return ResponseEntity.ok(new ReportViewModel(packageService.getAllPackagesSentByClient(clientId)));
     }
 
     @GetMapping("/admin/reports/packages-by-receiver")
-    public ResponseEntity<ReportViewModel> getPackagesByReceiver(){
-        return ResponseEntity.ok(new ReportViewModel(packageService.getAllRegisteredPackagesByReceiver(1L)));
+    public ResponseEntity<ReportViewModel> getPackagesByReceiver(@RequestParam Long clientId) {
+        return ResponseEntity.ok(new ReportViewModel(packageService.getAllRegisteredPackagesByReceiver(clientId)));
     }
 
     @GetMapping("/admin/reports/revenue")
-    public ResponseEntity<ReportViewModel> getRevenue(){
-        return ResponseEntity.ok(new ReportViewModel(logisticCompanyService.getRevenueForTimePeriod(1L, LocalDate.now().minusDays(1), LocalDate.now().plusDays(6))));
+    public ResponseEntity<ReportViewModel> getRevenue(@RequestParam Long clientId, @RequestParam String startDate, @RequestParam String endDate) {
+        return ResponseEntity.ok(new ReportViewModel(logisticCompanyService.getRevenueForTimePeriod(clientId, LocalDate.parse(startDate), LocalDate.parse(endDate))));
     }
 }

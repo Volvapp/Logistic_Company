@@ -7,6 +7,7 @@ import org.logisticcompany.model.LogisticCompany;
 import org.logisticcompany.model.Office;
 import org.logisticcompany.model.Package;
 import org.logisticcompany.model.dto.LogisticCompanyDto;
+import org.logisticcompany.model.service.LogisticCompanyServiceModel;
 import org.logisticcompany.repository.LogisticCompanyRepository;
 import org.logisticcompany.service.Impl.LogisticCompanyServiceImpl;
 import org.logisticcompany.service.exceptions.ObjectNotFoundException;
@@ -37,6 +38,8 @@ public class LogisticCompanyServiceTests {
     private LogisticCompany company;
     private LogisticCompanyDto companyDto;
 
+    private LogisticCompanyServiceModel logisticCompanyServiceModel;
+
     @BeforeEach
     void setUp() {
         company = new LogisticCompany();
@@ -45,6 +48,9 @@ public class LogisticCompanyServiceTests {
 
         companyDto = new LogisticCompanyDto();
         companyDto.setName("Test Company");
+
+        logisticCompanyServiceModel = new LogisticCompanyServiceModel();
+        logisticCompanyServiceModel.setName("Test Company");
     }
 
     @Test
@@ -52,7 +58,7 @@ public class LogisticCompanyServiceTests {
         when(modelMapper.map(companyDto, LogisticCompany.class)).thenReturn(company);
         when(logisticCompanyRepository.save(company)).thenReturn(company);
 
-        LogisticCompany result = logisticCompanyService.createCompany(companyDto);
+        LogisticCompany result = logisticCompanyService.createCompany(logisticCompanyServiceModel, "test");
 
         assertNotNull(result);
         assertEquals(company.getName(), result.getName());

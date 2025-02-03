@@ -44,7 +44,7 @@ public class PackageController {
         return "my-packages";
     }
 
-    @PostMapping("/buy-package/{id}")
+    @PostMapping("/pay-package/{id}")
     public String payPackageConfirm(@PathVariable Long id, RedirectAttributes redirectAttributes, Principal principal) {
 
         boolean canUserPayPackage = userService.pay(principal.getName(), id);

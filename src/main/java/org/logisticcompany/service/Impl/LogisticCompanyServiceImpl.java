@@ -4,6 +4,7 @@ import org.logisticcompany.model.LogisticCompany;
 import org.logisticcompany.model.Package;
 import org.logisticcompany.model.UserEntity;
 import org.logisticcompany.model.dto.LogisticCompanyDto;
+import org.logisticcompany.model.service.LogisticCompanyServiceModel;
 import org.logisticcompany.repository.LogisticCompanyRepository;
 import org.logisticcompany.repository.OfficeRepository;
 import org.logisticcompany.repository.UserRepository;
@@ -35,17 +36,21 @@ public class LogisticCompanyServiceImpl implements LogisticCompanyService {
     }
 
     @Override
-    public LogisticCompany createCompany(LogisticCompanyDto companyDto) {
-        // Convert DTO to entity
-        LogisticCompany company = modelMapper.map(companyDto, LogisticCompany.class);
+    public LogisticCompany createCompany(LogisticCompanyServiceModel logisticCompanyServiceModel, String username) {
+        // Convert service model to entity
+        LogisticCompany logisticCompany = modelMapper.map(logisticCompanyServiceModel, LogisticCompany.class);
+
+        logisticCompany.setRevenue(0.0);
+        logisticCompany.setOffices(new ArrayList<>());
+        logisticCompany.setUserEntities(new ArrayList<>());
 
         // Save company to the database
-        logisticCompanyRepository.save(company);
+        logisticCompanyRepository.save(logisticCompany);
 
         // Log creation info
-        log.info(String.format("Company %s created", company.getName()));
+        log.info(String.format("Logistic Company %s created", logisticCompany.getName()));
 
-        return company;
+        return logisticCompany;
     }
 
     @Override

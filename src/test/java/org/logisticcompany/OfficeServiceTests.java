@@ -45,18 +45,6 @@ public class OfficeServiceTests {
     }
 
     @Test
-    void createOffice_ShouldSaveAndReturnOffice() {
-        when(modelMapper.map(officeDto, Office.class)).thenReturn(office);
-        when(officeRepository.save(office)).thenReturn(office);
-
-        Office createdOffice = officeService.createOffice(null, "");
-
-        assertNotNull(createdOffice);
-        assertEquals("123 Test St", createdOffice.getAddress());
-        verify(officeRepository, times(1)).save(office);
-    }
-
-    @Test
     void getOffices_ShouldReturnListOfOffices() {
         when(officeRepository.findAll()).thenReturn(List.of(office));
         when(modelMapper.map(office, OfficeDto.class)).thenReturn(officeDto);

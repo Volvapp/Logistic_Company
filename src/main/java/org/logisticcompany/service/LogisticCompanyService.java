@@ -3,7 +3,6 @@ package org.logisticcompany.service;
 import org.logisticcompany.model.LogisticCompany;
 import org.logisticcompany.model.dto.LogisticCompanyDto;
 import org.logisticcompany.model.service.LogisticCompanyServiceModel;
-import org.logisticcompany.model.service.PackageServiceModel;
 import org.logisticcompany.model.view.LogisticCompanyViewModel;
 
 import java.time.LocalDate;

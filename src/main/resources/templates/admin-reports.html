@@ -3,7 +3,7 @@
 <head th:replace="/fragments/commons :: head">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reports</title>
+    <title>Admin Reports</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
@@ -11,15 +11,17 @@
 <nav th:replace="/fragments/commons :: navigation"></nav>
 
 <div class="container mt-4">
-    <h2 class="mb-4 text-white text-center">Reports</h2>
+    <h2 class="mb-4 text-white text-center">Admin Reports</h2>
     <div class="row g-3">
-        <button class="btn btn-warning" onclick="fetchReport('/reports/all-employees', 'All Employees')">All Employees</button>
-        <button class="btn btn-warning" onclick="fetchReport('/reports/all-clients', 'All Clients')">All Clients</button>
-        <button class="btn btn-warning" onclick="fetchReport('/reports/all-packages', 'All Packages')">All Packages</button>
-        <button class="btn btn-warning" onclick="fetchReport('/reports/not-delivered-packages', 'Not Delivered Packages')">Not Delivered Packages</button>
-        <button class="btn btn-warning" onclick="fetchReport('/reports/sent-not-delivered', 'Sent Not Delivered Packages')">Sent Not Delivered</button>
-        <button class="btn btn-warning" onclick="fetchReport('/reports/packages-by-client', 'Packages by Client')">Packages by Client</button>
-        <button class="btn btn-warning" onclick="fetchReport('/reports/revenue', 'Revenue')">Revenue</button>
+        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/all-employees', 'All Employees')">All Employees</button>
+        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/all-clients', 'All Clients')">All Clients</button>
+        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/all-packages', 'All Packages')">All Packages</button>
+        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/not-delivered-packages', 'Not Delivered Packages')">Not Delivered Packages</button>
+        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/sent-not-delivered', 'Sent Not Delivered Packages')">Sent Not Delivered</button>
+        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/delivered-packages', 'Delivered Packages')">Delivered Packages</button>
+        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/packages-by-client', 'Packages by Client')">Packages by Client</button>
+        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/packages-by-receiver', 'Packages by Receiver')">Packages by Receiver</button>
+        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/revenue', 'Revenue Report')">Revenue Report</button>
     </div>
 </div>
 

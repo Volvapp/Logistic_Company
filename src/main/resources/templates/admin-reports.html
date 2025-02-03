@@ -18,7 +18,6 @@
         <button class="btn btn-warning" onclick="fetchReport('/admin/reports/all-packages', 'All Packages')">All Packages</button>
         <button class="btn btn-warning" onclick="fetchReport('/admin/reports/not-delivered-packages', 'Not Delivered Packages')">Not Delivered Packages</button>
         <button class="btn btn-warning" onclick="fetchReport('/admin/reports/sent-not-delivered', 'Sent Not Delivered Packages')">Sent Not Delivered</button>
-        <button class="btn btn-warning" onclick="fetchReport('/admin/reports/delivered-packages', 'Delivered Packages')">Delivered Packages</button>
         <button class="btn btn-warning" onclick="fetchReport('/admin/reports/packages-by-client', 'Packages by Client')">Packages by Client</button>
         <button class="btn btn-warning" onclick="fetchReport('/admin/reports/packages-by-receiver', 'Packages by Receiver')">Packages by Receiver</button>
         <button class="btn btn-warning" onclick="fetchReport('/admin/reports/revenue', 'Revenue Report')">Revenue Report</button>
@@ -42,15 +41,28 @@
 
 <script>
     function fetchReport(url, title) {
+        // Set the modal title
         document.getElementById('reportModalLabel').innerText = title;
+        // Show a loading message
         document.getElementById('reportContent').innerText = 'Loading...';
+
+        // Fetch the report data
         fetch(url)
-            .then(response => response.text())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse the response as JSON
+            })
             .then(data => {
-                document.getElementById('reportContent').innerText = data;
+                // Set the inner text of the reportContent element with the data property
+                document.getElementById('reportContent').innerText = data.data;
+                // Show the modal
                 new bootstrap.Modal(document.getElementById('reportModal')).show();
             })
             .catch(error => {
+                // Handle errors
+                console.error('Error fetching report:', error);
                 document.getElementById('reportContent').innerText = 'Error fetching data.';
             });
     }

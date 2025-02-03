@@ -29,8 +29,14 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .antMatchers("/", "/users/login", "/users/register").permitAll()
                 .antMatchers("/admin").hasRole(Role.ADMIN.name())
-                .antMatchers("/admin/createCompany").hasRole(Role.ADMIN.name())
-                .antMatchers("/admin/createEmployee").hasRole(Role.ADMIN.name())
+                .antMatchers("/companies/add-company").hasRole(Role.ADMIN.name())
+                .antMatchers("/employees/add-employee").hasRole(Role.ADMIN.name())
+                .antMatchers("/offices/add-office").hasRole(Role.ADMIN.name())
+                .antMatchers("/admin/reports").hasRole(Role.ADMIN.name())
+                .antMatchers("/packages/my-packages").hasRole(Role.CLIENT.name())
+                .antMatchers("/packages/add-package").hasRole(Role.CLIENT.name())
+                .antMatchers("/employees/office-employee/packages").hasRole(Role.OFFICE_EMPLOYEE.name())
+                .antMatchers("/employees/courier-employee/packages").hasRole(Role.COURIER_EMPLOYEE.name())
                 .antMatchers("/**").authenticated()
                 .and()
                 .formLogin()
@@ -45,18 +51,6 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID");
-
-//         /home(OfficeEmployeeLogicForAcceptingPackages(table) (Assign to a free courier) -> role office_employee,
-//               CourierEmployeeLogicForDelivering(table) -> role courier_employee,
-//               ClientLogicForSendingOrAcceptingPackage -> role client)
-//         /home/createPackage (role -> client)
-//         /admin(Managing companies and employees (read, delete))
-//         /admin/createCompany
-//         /admin/updateCompany{id}
-//         /admin/createEmployee
-//         /admin/updateEmployee/{id}
-//         /login
-//         /register
     }
 
     @Override

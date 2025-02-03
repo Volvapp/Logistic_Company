@@ -5,6 +5,7 @@ import org.logisticcompany.model.Office;
 import org.logisticcompany.model.Package;
 import org.logisticcompany.model.UserEntity;
 import org.logisticcompany.model.dto.OfficeDto;
+import org.logisticcompany.model.service.OfficeServiceModel;
 import org.logisticcompany.model.view.OfficeAddressesViewModel;
 import org.logisticcompany.repository.LogisticCompanyRepository;
 import org.logisticcompany.repository.OfficeRepository;
@@ -38,9 +39,16 @@ public class OfficeServiceImpl implements OfficeService {
     }
 
     @Override
-    public Office createOffice(OfficeDto officeDto) {
-        // Convert OfficeDto to Office entity
-        Office office = this.modelMapper.map(officeDto, Office.class);
+    public Office createOffice(OfficeServiceModel officeServiceModel, String username) {
+        // Convert Office Service Model to Office entity
+        LogisticCompany logisticCompanyRepositoryByName = logisticCompanyRepository.findByName(officeServiceModel.getCompany());
+
+        Office office = this.modelMapper.map(officeServiceModel, Office.class);
+
+
+        office.setLogisticCompany(logisticCompanyRepositoryByName);
+        office.setPackages(new ArrayList<>());
+        office.setUserEntities(new ArrayList<>());
 
         // Save office to the database
         this.officeRepository.save(office);

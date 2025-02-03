@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/commons :: head"></head>
+<style>
+  .table-yellow-fade tbody tr {
+    background-color: #fff3cd;
+    transition: background-color 0.3s ease;
+  }
+
+  .table-yellow-fade tbody tr:hover {
+    background-color: #ffeeba;
+  }
+
+  .popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f8d7da;
+    padding: 20px;
+    border: 2px solid #721c24;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+  }
+
+  .popup p {
+    background-color: #f5c6cb;
+    color: #721c24;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  .popup button {
+    background-color: #721c24;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .popup button:hover {
+    background-color: #5a1a1f;
+  }
+</style>
+<body>
+
+<nav th:replace="/fragments/commons :: navigation"></nav>
+
+<th:block th:if="${clientPackagesDetails.size() == 0}">
+  <div class="container-fluid mt-5">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card bg-danger">
+
+          <div class="card-body cart">
+            <div class="col-sm-12 empty-cart-cls text-center"><img src="https://i.imgur.com/dCdflKN.png"
+                                                                   width="130" height="130"
+                                                                   class="img-fluid mb-4 mr-3">
+              <h3><strong class="text-white">NO PACKAGES AVAILABLE</strong></h3>
+              <h4 class="text-white">Come back later to check if you have packages</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</th:block>
+
+<th:block th:unless="${clientPackagesDetails.size() == 0}">
+  <div class="container mt-3">
+    <table class="table table-hover table-yellow-fade">
+      <thead class="table-warning">
+      <tr>
+        <th scope="col"><strong>Receiver</strong></th>
+        <th scope="col"><strong>Courier</strong></th>
+        <th scope="col"><strong>Address</strong></th>
+        <th scope="col"><strong>Weight</strong></th>
+        <th scope="col"><strong>Price</strong></th>
+        <th scope="col"><strong>Registration Date</strong></th>
+        <th scope="col"><strong>Arrival Date</strong></th>
+        <th scope="col"><strong>Package State</strong></th>
+        <th scope="col"><strong>Package Type</strong></th>
+        <th scope="col"><strong>Package Paid Status</strong></th>
+        <th scope="col"><strong>Actions</strong></th>
+      </tr>
+      </thead>
+      <tbody th:each="c : ${clientPackagesDetails}" th:object="${c}">
+      <tr>
+        <td th:text="*{receiver}"></td>
+        <td th:text="*{courier}"></td>
+        <td th:text="*{address}"></td>
+        <td th:text="*{weight}"></td>
+        <td th:text="|$*{price}|"></td>
+        <td th:text="*{registrationDate}"></td>
+        <td th:text="*{arrivalDate}"></td>
+        <td th:text="*{state}"></td>
+        <td th:text="*{type}"></td>
+        <td th:text="*{packagePaidStatus}"></td>
+        <td>
+          <th:block th:unless="${c.packagePaidStatus == 'PAID'}">
+            <form th:action="@{/packages/pay-package/{id}(id = *{id})}" method="post"
+                  style="display:inline;">
+              <button type="submit" class="btn btn-sm btn-success">Pay</button>
+            </form>
+          </th:block>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</th:block>
+
+<footer th:replace="/fragments/footer-fixed-bottom :: footer-fixed-bottom"></footer>
+
+</body>
+</html>

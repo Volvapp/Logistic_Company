@@ -49,7 +49,7 @@ public class OfficeServiceTests {
         when(modelMapper.map(officeDto, Office.class)).thenReturn(office);
         when(officeRepository.save(office)).thenReturn(office);
 
-        Office createdOffice = officeService.createOffice(officeDto);
+        Office createdOffice = officeService.createOffice(null, "");
 
         assertNotNull(createdOffice);
         assertEquals("123 Test St", createdOffice.getAddress());

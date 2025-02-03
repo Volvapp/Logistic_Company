@@ -47,7 +47,7 @@ public class LogisticCompanyController {
 
         logisticCompanyService.createCompany(modelMapper.map(logisticCompanyAddBindingModel, LogisticCompanyServiceModel.class), principal.getName());
 
-        return "redirect:/admin/my-packages";
+        return "redirect:/";
     }
 
     @ModelAttribute

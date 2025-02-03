@@ -119,7 +119,6 @@ public class UserDto {
                 "username='" + username + '\'' + "\n" +
                 "firstName='" + firstName + '\'' + "\n" +
                 "lastName='" + lastName + '\'' + "\n" +
-                "password='" + password + '\'' + "\n" +
                 "email='" + email + '\'' + "\n" +
                 "balance='" + balance + '\'' + "\n" +
                 "age=" + age + "\n" +

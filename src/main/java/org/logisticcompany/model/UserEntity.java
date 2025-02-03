@@ -145,7 +145,6 @@ public class UserEntity extends BaseEntity {
                 "username='" + username + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", balance='" + balance + '\'' +
                 ", age=" + age +

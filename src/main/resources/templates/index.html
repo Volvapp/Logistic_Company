@@ -51,7 +51,7 @@
             <th:block sec:authorize="hasRole('OFFICE_EMPLOYEE')">
                 <p class="mb-5 h3" style="color: #ff8100!important;">You can start accepting the packages!</p>
                 <div>
-                    <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/office-employee/packages}">Packages</a>
+                    <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/employees/office-employee/packages}">Packages</a>
                     <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/users/profile}">My Profile</a>
                 </div>
             </th:block>
@@ -59,7 +59,7 @@
             <th:block sec:authorize="hasRole('COURIER_EMPLOYEE')">
                 <p class="mb-5 h3" style="color: #ff8100!important;">You can start delivering packages!</p>
                 <div>
-                    <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/courier-employee/packages}">Packages</a>
+                    <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/employees/courier-employee/packages}">Packages</a>
                     <a class="btn btn-primary btn-lg col-md-3 btn-outline-warning m-2" th:href="@{/users/profile}">My Profile</a>
                 </div>
             </th:block>

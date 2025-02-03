@@ -115,7 +115,7 @@ public class UserDto {
 
     @Override
     public String toString() {
-        return "UserDto{" + "\n" +
+        return "User{" + "\n" +
                 "username='" + username + '\'' + "\n" +
                 "firstName='" + firstName + '\'' + "\n" +
                 "lastName='" + lastName + '\'' + "\n" +

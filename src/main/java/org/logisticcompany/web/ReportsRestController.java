@@ -54,12 +54,12 @@ public class ReportsRestController {
 
     @GetMapping("/admin/reports/packages-by-client")
     public ResponseEntity<ReportViewModel> getPackagesByClient(){
-        return ResponseEntity.ok(new ReportViewModel(packageService.getAllPackagesSentByClient(1L)));
+        return ResponseEntity.ok(new ReportViewModel(packageService.getAllPackagesSentByClient(2L)));
     }
 
     @GetMapping("/admin/reports/packages-by-receiver")
     public ResponseEntity<ReportViewModel> getPackagesByReceiver(){
-        return ResponseEntity.ok(new ReportViewModel(packageService.getAllRegisteredPackagesByReceiver(1L)));
+        return ResponseEntity.ok(new ReportViewModel(packageService.getAllRegisteredPackagesByReceiver(3L)));
     }
 
     @GetMapping("/admin/reports/revenue")

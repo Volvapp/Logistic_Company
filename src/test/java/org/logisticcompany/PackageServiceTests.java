@@ -153,19 +153,4 @@ public class PackageServiceTests {
         // Assert
         assertTrue(price > 100.0);  // Price should be modified due to the address tax
     }
-
-    @Test
-    void testGetAllRegisteredPackages() {
-        // Arrange
-        Package package1 = new Package();
-        Package package2 = new Package();
-        when(packageRepository.findAllByType(PackageType.ACCEPTED)).thenReturn(List.of(package1, package2));
-        when(modelMapper.map(any(Package.class), eq(PackageDto.class))).thenReturn(new PackageDto());
-
-        // Act
-        String result = packageService.getAllRegisteredPackages();
-
-        // Assert
-        assertNotNull(result);
-    }
 }

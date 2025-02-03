@@ -127,9 +127,7 @@ public class PackageDto {
 
     @Override
     public String toString() {
-        return "PackageDto{" + "\n" +
-                "sender=" + sender + "\n" +
-                "receiver=" + receiver + "\n" +
+        return "Package{" + "\n" +
                 "address='" + address + '\'' + "\n" +
                 "weight=" + weight + "\n" +
                 "price=" + price + "\n" +

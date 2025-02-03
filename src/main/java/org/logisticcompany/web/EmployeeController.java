@@ -1,18 +1,15 @@
 package org.logisticcompany.web;
 
-import org.logisticcompany.model.LogisticCompany;
 import org.logisticcompany.model.binding.EmployeeAddBindingModel;
 import org.logisticcompany.model.service.EmployeeServiceModel;
 import org.logisticcompany.service.LogisticCompanyService;
+import org.logisticcompany.service.PackageService;
 import org.logisticcompany.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -28,10 +25,45 @@ public class EmployeeController {
 
     private final LogisticCompanyService logisticCompanyService;
 
-    public EmployeeController(UserService userService, ModelMapper modelMapper, LogisticCompanyService logisticCompanyService) {
+    private final PackageService packageService;
+
+    public EmployeeController(UserService userService, ModelMapper modelMapper, LogisticCompanyService logisticCompanyService, PackageService packageService) {
         this.userService = userService;
         this.modelMapper = modelMapper;
         this.logisticCompanyService = logisticCompanyService;
+        this.packageService = packageService;
+    }
+
+    @GetMapping("/office-employee/packages")
+    public String officeEmployeePackages(Model model){
+
+        model.addAttribute("employeePackagesDetails", packageService.findAllEmployeePackagesDetails());
+
+        return "employee-packages";
+    }
+
+    @GetMapping("/courier-employee/packages")
+    public String courierEmployeePackages(Model model){
+
+        model.addAttribute("courierPackagesDetails", packageService.findAllEmployeePackagesDetails());
+
+        return "courier-packages";
+    }
+
+    @PostMapping("/deliver-package/{id}")
+    public String deliverPackageConfirm(@PathVariable Long id, RedirectAttributes redirectAttributes, Principal principal) {
+
+        packageService.deliverPackage(id, principal.getName());
+
+        return "redirect:/";
+    }
+
+    @PostMapping("/accept-package/{id}")
+    public String acceptPackageConfirm(@PathVariable Long id, RedirectAttributes redirectAttributes, Principal principal) {
+
+        packageService.acceptPackage(id, principal.getName());
+
+        return "redirect:/";
     }
 
     @GetMapping("/add-employee")

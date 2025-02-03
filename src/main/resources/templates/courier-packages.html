@@ -52,7 +52,7 @@
 
 <nav th:replace="/fragments/commons :: navigation"></nav>
 
-<th:block th:if="${employeePackagesDetails.size() == 0}">
+<th:block th:if="${courierPackagesDetails.size() == 0}">
   <div class="container-fluid mt-5">
     <div class="row">
       <div class="col-md-12">
@@ -72,7 +72,7 @@
   </div>
 </th:block>
 
-<th:block th:unless="${employeePackagesDetails.size() == 0}">
+<th:block th:unless="${courierPackagesDetails.size() == 0}">
   <div class="container mt-3">
     <table class="table table-hover table-yellow-fade">
       <thead class="table-warning">
@@ -90,7 +90,7 @@
         <th scope="col"><strong>Actions</strong></th>
       </tr>
       </thead>
-      <tbody th:each="c : ${employeePackagesDetails}" th:object="${c}">
+      <tbody th:each="c : ${courierPackagesDetails}" th:object="${c}">
       <tr>
         <td th:text="*{receiver}"></td>
         <td th:text="*{courier}"></td>
@@ -103,10 +103,10 @@
         <td th:text="*{type}"></td>
         <td th:text="*{packagePaidStatus}"></td>
         <td>
-          <th:block th:if="${c.state == 'NOT_DELIVERED' && c.packagePaidStatus == 'PAID' && c.type == 'SENT'}">
-            <form th:action="@{/employees/accept-package/{id}(id = *{id})}" method="post"
+          <th:block th:if="${c.state == 'NOT_DELIVERED' && c.packagePaidStatus == 'PAID' && c.type == 'ACCEPTED'}">
+            <form th:action="@{/employees/deliver-package/{id}(id = *{id})}" method="post"
                   style="display:inline;">
-              <button type="submit" class="btn btn-sm btn-success">Accept</button>
+              <button type="submit" class="btn btn-sm btn-success">Deliver</button>
             </form>
           </th:block>
         </td>

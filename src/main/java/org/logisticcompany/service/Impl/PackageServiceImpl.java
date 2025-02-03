@@ -61,7 +61,7 @@ public class PackageServiceImpl implements PackageService {
                 .findByUsername(userName)
                 .orElseThrow(() -> new ObjectNotFoundException(String.format("User with name %s not found", userName)));
 
-        if(byAddress.isPresent()) {
+        if (byAddress.isPresent()) {
             sender.setLogisticCompany(byAddress.get().getLogisticCompany());
         } else {
             sender.setLogisticCompany(logisticCompanyRepository.findById(1L).get());
@@ -196,7 +196,7 @@ public class PackageServiceImpl implements PackageService {
         List<PackageDto> packageDtos = new ArrayList<>();
         UserEntity user = this.userRepository.findById(clientId).orElseThrow(() -> new ObjectNotFoundException(String.format("Client with id %d not found", clientId)));
         Set<Role> roles = user.getRoles().stream().map(RoleEntity::getRole).collect(Collectors.toSet());
-        if (!roles.contains(Role.CLIENT)){
+        if (!roles.contains(Role.CLIENT)) {
             return "User is not a client!";
         }
         List<Package> packages = this.packageRepository.findAllByTypeAndSender_Id(PackageType.SENT, clientId);
@@ -247,9 +247,31 @@ public class PackageServiceImpl implements PackageService {
                 .findByUsername(employeeUsername)
                 .orElseThrow(() -> new ObjectNotFoundException(String.format("Employee %s not found", employeeUsername)));
 
-        pack.setReceiver(employee);
-        pack.setType(PackageType.ACCEPTED);
-        this.packageRepository.save(pack);
+        if (pack.getPackagePaidStatus().equals(PackagePaidStatus.NON_PAID)) {
+            log.info("Package is not accepted because client has not paid it!");
+        } else {
+            pack.setReceiver(employee);
+            pack.setType(PackageType.ACCEPTED);
+            this.packageRepository.save(pack);
+        }
+    }
+
+    @Override
+    public void deliverPackage(Long packageId, String employeeUsername) {
+        Package pack = this.packageRepository
+                .findById(packageId)
+                .orElseThrow(() -> new ObjectNotFoundException(String.format("Package with id %d not found", packageId)));
+        UserEntity employee = this.userRepository
+                .findByUsername(employeeUsername)
+                .orElseThrow(() -> new ObjectNotFoundException(String.format("Employee %s not found", employeeUsername)));
+
+        if (pack.getPackagePaidStatus().equals(PackagePaidStatus.NON_PAID) && pack.getType().equals(PackageType.SENT)) {
+            log.info("Cannot deliver package!");
+        } else {
+            pack.setCourier(employee);
+            pack.setState(State.DELIVERED);
+            this.packageRepository.save(pack);
+        }
     }
 
     @Override
@@ -291,6 +313,34 @@ public class PackageServiceImpl implements PackageService {
         List<ClientPackageDetailsView> clientPackageDetailsViews = new ArrayList<>();
 
         for (Package senderPackage : allBySender_username) {
+            // Map package details to ClientPackageDetailsView
+            ClientPackageDetailsView clientPackageDetailsView = new ClientPackageDetailsView();
+            clientPackageDetailsView.setId(senderPackage.getId());
+            clientPackageDetailsView.setReceiver(senderPackage.getReceiver() != null ?
+                    senderPackage.getReceiver().getFirstName() + " " + senderPackage.getReceiver().getLastName() : "No Receiver");
+            clientPackageDetailsView.setCourier(senderPackage.getCourier() != null ?
+                    senderPackage.getCourier().getFirstName() + " " + senderPackage.getCourier().getLastName() : "No Courier");
+            clientPackageDetailsView.setAddress(senderPackage.getAddress());
+            clientPackageDetailsView.setWeight(senderPackage.getWeight());
+            clientPackageDetailsView.setPrice(senderPackage.getPrice());
+            clientPackageDetailsView.setRegistrationDate(senderPackage.getRegistrationDate());
+            clientPackageDetailsView.setArrivalDate(senderPackage.getArrivalDate());
+            clientPackageDetailsView.setState(senderPackage.getState().name());
+            clientPackageDetailsView.setType(senderPackage.getType().name());
+            clientPackageDetailsView.setPackagePaidStatus(senderPackage.getPackagePaidStatus().name());
+
+            clientPackageDetailsViews.add(clientPackageDetailsView);
+        }
+
+        return clientPackageDetailsViews;
+    }
+
+    @Override
+    public List<ClientPackageDetailsView> findAllEmployeePackagesDetails() {
+        List<Package> all = packageRepository.findAll();
+        List<ClientPackageDetailsView> clientPackageDetailsViews = new ArrayList<>();
+
+        for (Package senderPackage : all) {
             // Map package details to ClientPackageDetailsView
             ClientPackageDetailsView clientPackageDetailsView = new ClientPackageDetailsView();
             clientPackageDetailsView.setId(senderPackage.getId());

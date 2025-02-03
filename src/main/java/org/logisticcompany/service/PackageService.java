@@ -32,7 +32,11 @@ public interface PackageService {
 
     void acceptPackage(Long packageId, String employeeUsername);
 
+    void deliverPackage(Long packageId, String employeeUsername);
+
     void initializePackages();
 
     List<ClientPackageDetailsView> findAllClientPackagesDetails(String username);
+
+    List<ClientPackageDetailsView> findAllEmployeePackagesDetails();
 }

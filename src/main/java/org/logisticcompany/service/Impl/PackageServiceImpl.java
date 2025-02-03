@@ -194,6 +194,11 @@ public class PackageServiceImpl implements PackageService {
     public String getAllPackagesSentByClient(Long clientId) {
         // Retrieve all packages sent by a specific client
         List<PackageDto> packageDtos = new ArrayList<>();
+        UserEntity user = this.userRepository.findById(clientId).orElseThrow(() -> new ObjectNotFoundException(String.format("Client with id %d not found", clientId)));
+        Set<Role> roles = user.getRoles().stream().map(RoleEntity::getRole).collect(Collectors.toSet());
+        if (!roles.contains(Role.CLIENT)){
+            return "User is not a client!";
+        }
         List<Package> packages = this.packageRepository.findAllByTypeAndSender_Id(PackageType.SENT, clientId);
 
         for (Package pack : packages) {
@@ -255,6 +260,8 @@ public class PackageServiceImpl implements PackageService {
         UserEntity courier = this.userRepository.findById(4L).get();
 
         Package package1 = new Package(sender, receiver, courier, "123 Main St", 5.0, 100.0, PackageType.SENT);
+        package1.setRegistrationDate(LocalDate.now());
+        package1.setArrivalDate(LocalDate.now().plusDays(1));
         this.packageRepository.save(package1);
 
         Package package2 = new Package(sender, receiver, courier, "456 Oak Rd", 10.0, 150.0, PackageType.SENT);

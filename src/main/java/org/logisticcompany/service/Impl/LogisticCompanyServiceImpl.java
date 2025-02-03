@@ -4,6 +4,7 @@ import org.logisticcompany.model.LogisticCompany;
 import org.logisticcompany.model.Package;
 import org.logisticcompany.model.UserEntity;
 import org.logisticcompany.model.dto.LogisticCompanyDto;
+import org.logisticcompany.model.enums.Role;
 import org.logisticcompany.model.service.LogisticCompanyServiceModel;
 import org.logisticcompany.model.view.LogisticCompanyViewModel;
 import org.logisticcompany.repository.LogisticCompanyRepository;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -113,14 +115,13 @@ public class LogisticCompanyServiceImpl implements LogisticCompanyService {
 
     @Override
     public void initializeLogisticCompanies() {
-        UserEntity userEntityOfficeEmployee = userRepository.findById(3L).get();
-        UserEntity userEntityCourierEmployee = userRepository.findById(4L).get();
-
+        List<UserEntity> all = this.userRepository.findAll();
         LogisticCompany logisticCompany = new LogisticCompany("Speedy", 0.0);
-
-        logisticCompany.setUserEntities(List.of(userEntityOfficeEmployee, userEntityCourierEmployee));
+        all.forEach(userEntity -> userEntity.setLogisticCompany(logisticCompany));
+        logisticCompany.setUserEntities(all);
 
         logisticCompanyRepository.save(logisticCompany);
+        this.userRepository.saveAll(all);
     }
 
     @Override
